@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Service Backend (Flask)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: klub-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    networks:
+      - klub-network
+
+  # Service Frontend (Angular)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: klub-frontend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - klub-network
+
+networks:
+  klub-network:
+    driver: bridge
