@@ -24,9 +24,10 @@ services:
       dockerfile: Dockerfile
     container_name: klub-frontend
     ports:
-      - "4000:4000"
+      - "4200:4200"
     environment:
       - NODE_ENV=production
+      - PORT=4200
     depends_on:
       - backend
     restart: unless-stopped

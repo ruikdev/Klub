@@ -27,8 +27,8 @@ COPY --from=build /app/package*.json ./
 # Installer uniquement les dépendances de production
 RUN npm ci --only=production
 
-# Exposer le port 4000 (port par défaut pour Angular SSR)
-EXPOSE 4000
+# Exposer le port 4200
+EXPOSE 4200
 
 # Commande pour démarrer le serveur SSR
 CMD ["node", "dist/klub/server/server.mjs"]
