@@ -1,5 +1,5 @@
-<app-nav></app-nav>
+<app-nav (navigate)="onNavigate($event)"></app-nav>
 
 <main class="pt-16">
-  <router-outlet></router-outlet>
+  <app-home *ngIf="currentView === 'home'"></app-home>
 </main>
