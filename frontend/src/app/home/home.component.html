@@ -1,0 +1,40 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-br from-purple-600 via-pink-500 to-purple-700 text-white px-6 py-12">
+    <div class="max-w-md mx-auto">
+      <h1 class="text-4xl font-bold mb-4">Bienvenue sur Klub</h1>
+      <p class="text-purple-100 text-lg mb-6">
+        Découvrez et créez des événements incroyables près de chez vous
+      </p>
+      <button class="bg-white text-purple-600 font-semibold px-6 py-3 rounded-lg hover:shadow-xl active:scale-95 transition-all">
+        Explorer maintenant
+      </button>
+    </div>
+  </div>
+
+  <!-- Événements à venir -->
+  <div class="px-6 py-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Événements à venir</h2>
+    <div class="space-y-4">
+      <div *ngFor="let event of events" class="bg-white rounded-xl shadow-sm overflow-hidden active:scale-98 transition-transform">
+        <div class="h-40 bg-gradient-to-br from-purple-400 to-pink-400"></div>
+        <div class="p-4">
+          <h3 class="font-bold text-lg text-gray-800 mb-2">{{ event.title }}</h3>
+          <div class="flex items-center text-sm text-gray-600 mb-2">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            {{ event.date }}
+          </div>
+          <div class="flex items-center text-sm text-gray-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            {{ event.location }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
