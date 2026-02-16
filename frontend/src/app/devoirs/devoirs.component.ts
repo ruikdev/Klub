@@ -41,4 +41,20 @@ export class DevoirsComponent implements OnInit {
       details: data[date].details || null
     }));
   }
+
+  showChat = false;
+  showDevoirs = true;
+  selectedDevoirId: number | null = null;
+
+  openChat(idDevoir: number) {
+    this.selectedDevoirId = idDevoir;
+    this.showChat = true;
+    this.showDevoirs = false;
+  }
+
+  closeChat() {
+    this.showChat = false;
+    this.showDevoirs = true;
+    this.selectedDevoirId = null;
+  }
 }

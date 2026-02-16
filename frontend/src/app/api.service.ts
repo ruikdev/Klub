@@ -14,4 +14,12 @@ export class ApiService {
   getDevoirs(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/devoirs`);
   }
+
+  sendChatMessage(question: string, idDevoir?: number): Observable<any> {
+    const payload = {
+      question: question,
+      id: idDevoir || null
+    };
+    return this.http.post(`${this.API_BASE_URL}/chat`, payload);
+  }
 }
