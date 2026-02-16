@@ -22,9 +22,8 @@ export class ChatComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    // Envoyer automatiquement une question d'explication au chargement si un devoir est sélectionné
     if (this.devoirId) {
-      this.question = "Peux-tu m'expliquer ce devoir et me donner des conseils pour le réussir ?";
+      this.question = "Peux-tu m'expliquer ce devoir ?";
       this.sendMessage();
     }
   }
