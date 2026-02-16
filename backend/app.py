@@ -5,6 +5,14 @@ import json
 import os
 import base64
 from datetime import datetime
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"),
+)
 
 app = Flask(__name__)
 
@@ -70,6 +78,46 @@ def devoirs():
     
     return jsonify(devoirs_avec_details), 200
 
+@app.route("/api/chat", methods=["POST"])
+def requests_ia():
+    data = request.get_json()
+    id_devoir = data.get("id")
+    question = data.get("question")
+
+    if not question:
+        return jsonify(error="Question manquante"), 400
+
+    system_prompt = (
+        "Tu es 'Klub AI', un assistant pédagogique expert et bienveillant. "
+        "Ton but est d'aider les élèves à comprendre leurs cours et devoirs. "
+        "Instructions : "
+        "1. Sois pédagogique : n'envoie pas juste la réponse, explique la démarche. "
+        "2. Sois concis mais complet. "
+        "3. Utilise le Markdown (gras, listes, blocs de code) pour rendre la réponse lisible. "
+        "4. Si la question est floue, demande des précisions."
+    )
+
+    prompt_utilisateur = f"L'élève pose la question suivante : {question}"
+    if id_devoir:
+        prompt_utilisateur = f"Contexte : Aide concernant le devoir #{id_devoir}.\n{prompt_utilisateur}"
+
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt_utilisateur},
+            ],
+            model="llama-3.3-70b-versatile",
+            temperature=0.7,
+            max_tokens=1024,
+        )
+        
+        reponse = chat_completion.choices[0].message.content
+        return jsonify(response=reponse), 200
+
+    except Exception as e:
+        print(f"Erreur Groq: {e}")
+        return jsonify(error="Erreur lors de la génération de la réponse"), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
