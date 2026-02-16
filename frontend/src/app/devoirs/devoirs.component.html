@@ -1,0 +1,36 @@
+<div>
+  <h1>Devoirs</h1>
+  
+  <div *ngIf="loading">Chargement...</div>
+  
+  <div *ngIf="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && !error && devoirsList.length > 0">
+    <div *ngFor="let dateGroup of devoirsList">
+      <h2>{{ dateGroup.date }}</h2>
+      <ul>
+        <li *ngFor="let devoir of dateGroup.devoirs">
+          <strong>{{ devoir.matiere }}</strong>
+          <span *ngIf="devoir.interrogation"> ⚠️ INTERRO</span>
+          <br>
+          <p>Donné le: {{ devoir.donneLe }}</p>
+          
+          <!-- Afficher le contenu décodé depuis les détails -->
+          <div *ngIf="dateGroup.details && dateGroup.details.matieres">
+            <div *ngFor="let matiere of dateGroup.details.matieres">
+              <div *ngIf="matiere.id === devoir.idDevoir && matiere.aFaire?.contenu_decode">
+                <p><strong>Contenu:</strong></p>
+                <div [innerHTML]="matiere.aFaire.contenu_decode"></div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && !error && devoirsList.length === 0">
+    Aucun devoir
+  </div>
+</div>
+
