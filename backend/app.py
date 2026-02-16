@@ -80,12 +80,67 @@ def devoirs():
 
 @app.route("/api/chat", methods=["POST"])
 def requests_ia():
-    data = request.get_json()
+    data = request.get_json(force=True, silent=True)
+    
+    if data is None:
+        return jsonify(error="JSON invalide ou vide"), 400
+    
     id_devoir = data.get("id")
-    question = data.get("question")
+    question = data.get("question", "").strip()
 
     if not question:
-        return jsonify(error="Question manquante"), 400
+        return jsonify(error="Question manquante ou vide"), 400
+
+    # Récupérer les informations du devoir si un ID est fourni
+    contexte_devoir = ""
+    if id_devoir:
+        config = load_config()
+        if config:
+            api = EcoleDirecteAPI()
+            identifiant = config.get('identifiant')
+            motdepasse = config.get('motdepasse')
+            cn = config.get('cn')
+            cv = config.get('cv')
+            
+            if api.login(identifiant, motdepasse, cn, cv):
+                devoirs_data = api.get_devoirs()
+                
+                # Chercher le devoir correspondant à l'ID
+                devoir_trouve = None
+                date_devoir = None
+                
+                for date, devoirs_list in devoirs_data.items():
+                    for devoir in devoirs_list:
+                        if devoir.get('idDevoir') == id_devoir:
+                            devoir_trouve = devoir
+                            date_devoir = date
+                            break
+                    if devoir_trouve:
+                        break
+                
+                if devoir_trouve:
+                    # Récupérer les détails du devoir
+                    details = api.get_devoirs_pour_date(date_devoir)
+                    
+                    contexte_devoir = f"\n\n**INFORMATIONS DU DEVOIR :**\n"
+                    contexte_devoir += f"- Matière : {devoir_trouve.get('matiere', 'N/A')}\n"
+                    contexte_devoir += f"- Pour le : {date_devoir}\n"
+                    contexte_devoir += f"- Donné le : {devoir_trouve.get('donneLe', 'N/A')}\n"
+                    
+                    if devoir_trouve.get('interrogation'):
+                        contexte_devoir += "- ⚠️ INTERROGATION\n"
+                    
+                    # Ajouter le contenu du devoir s'il existe
+                    if details and 'matieres' in details:
+                        for matiere in details['matieres']:
+                            if matiere.get('id') == id_devoir and 'aFaire' in matiere:
+                                try:
+                                    contenu_encode = matiere['aFaire'].get('contenu', '')
+                                    if contenu_encode:
+                                        contenu_decode = base64.b64decode(contenu_encode).decode('utf-8')
+                                        contexte_devoir += f"- Contenu du devoir : {contenu_decode}\n"
+                                except:
+                                    pass
 
     system_prompt = (
         "Tu es 'Klub AI', un assistant pédagogique expert et bienveillant. "
@@ -94,12 +149,11 @@ def requests_ia():
         "1. Sois pédagogique : n'envoie pas juste la réponse, explique la démarche. "
         "2. Sois concis mais complet. "
         "3. Utilise le Markdown (gras, listes, blocs de code) pour rendre la réponse lisible. "
-        "4. Si la question est floue, demande des précisions."
+        "4. Si la question est floue, demande des précisions. "
+        "5. Si un contexte de devoir est fourni, utilise-le pour personnaliser ta réponse."
     )
 
-    prompt_utilisateur = f"L'élève pose la question suivante : {question}"
-    if id_devoir:
-        prompt_utilisateur = f"Contexte : Aide concernant le devoir #{id_devoir}.\n{prompt_utilisateur}"
+    prompt_utilisateur = f"{contexte_devoir}\n\nL'élève pose la question suivante : {question}"
 
     try:
         chat_completion = client.chat.completions.create(
