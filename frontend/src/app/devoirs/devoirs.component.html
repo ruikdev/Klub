@@ -1,13 +1,11 @@
 <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
   <div class="max-w-4xl mx-auto">
 
-    <!-- Loading State -->
     <div *ngIf="loading" class="flex flex-col items-center justify-center p-20 space-y-4">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       <p class="text-gray-500 font-medium animate-pulse">Chargement de vos devoirs...</p>
     </div>
 
-    <!-- Error State -->
     <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm mb-6">
       <div class="flex items-center">
         <span class="text-red-500 mr-3">⚠️</span>
@@ -15,16 +13,13 @@
       </div>
     </div>
 
-    <!-- Content -->
     <div *ngIf="!loading && !error && devoirsList.length > 0" class="space-y-12">
       <div *ngFor="let dateGroup of devoirsList" class="relative">
-        <!-- Date Header -->
         <h2 class="text-xl font-bold text-indigo-600 mb-6 flex items-center sticky top-0 bg-gray-50 py-2 z-10">
           <span class="bg-indigo-600 w-2 h-8 rounded-full mr-3"></span>
           {{ dateGroup.date | titlecase }}
         </h2>
 
-        <!-- Grid of Devoirs -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div *ngFor="let devoir of dateGroup.devoirs" 
                class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
@@ -47,7 +42,6 @@
                 Donné le {{ devoir.donneLe }}
               </div>
 
-              <!-- Contenu spécifique -->
               <div *ngIf="dateGroup.details && dateGroup.details.matieres" class="mt-4">
                 <div *ngFor="let matiere of dateGroup.details.matieres">
                   <div *ngIf="matiere.id === devoir.idDevoir && matiere.aFaire?.contenu_decode" 
@@ -59,7 +53,6 @@
               </div>
             </div>
             
-            <!-- Footer card indication -->
             <div class="bg-gray-50 px-5 py-2 border-t border-gray-100 text-[10px] text-gray-400 text-right">
               ID: {{ devoir.idDevoir }}
             </div>
@@ -68,7 +61,6 @@
       </div>
     </div>
 
-    <!-- Empty State -->
     <div *ngIf="!loading && !error && devoirsList.length === 0" 
          class="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200 shadow-inner mt-10">
       <span class="text-5xl block mb-4 text-gray-300">🎉</span>
