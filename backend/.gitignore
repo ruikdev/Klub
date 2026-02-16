@@ -3,3 +3,4 @@ __pycache__/
 .env
 venv/
 instance/
+ecole_direct_config.json
