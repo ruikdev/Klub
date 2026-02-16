@@ -33,7 +33,7 @@
         </div>
         <div class="flex-1 overflow-auto">
           <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Réponse de Klub AI</h3>
-          <div class="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">{{ response }}</div>
+          <div class="prose prose-sm max-w-none text-gray-700" [innerHTML]="response | markdown"></div>
         </div>
       </div>
     </div>
