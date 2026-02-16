@@ -10,5 +10,9 @@ import { DevoirsComponent } from './devoirs/devoirs.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }
