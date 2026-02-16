@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { CommonModule } from '@angular/common';
+import { ChatComponent } from '../chat/chat.component';
 
 @Component({
   selector: 'app-devoirs',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChatComponent],
   templateUrl: './devoirs.component.html',
   styleUrl: './devoirs.component.css'
 })
