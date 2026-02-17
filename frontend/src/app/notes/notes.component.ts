@@ -21,7 +21,9 @@ export class NotesComponent implements OnInit {
     this.apiService.getNotes().subscribe({
       next: (data) => {
         console.log('Notes récupérées:', data);
-        this.notes = data.notes || [];
+        // Filtrer pour garder uniquement les notes du dernier trimestre
+        const allNotes = data.notes || [];
+        this.notes = this.getLastTrimesterNotes(allNotes);
         this.loading = false;
       },
       error: (err) => {
@@ -32,7 +34,25 @@ export class NotesComponent implements OnInit {
     });
   }
 
+  private getLastTrimesterNotes(notes: any[]): any[] {
+    if (notes.length === 0) return [];
+    
+    // Trouver tous les codes de périodes uniques
+    const periodes = [...new Set(notes.map(note => note.codePeriode))];
+    
+    // Trier les périodes (A001, A002, A003, etc.)
+    const periodesTriees = periodes.sort().reverse();
+    
+    // Prendre le dernier trimestre (le plus récent)
+    const dernierTrimestre = periodesTriees[0];
+    
+    // Filtrer les notes du dernier trimestre
+    return notes.filter(note => note.codePeriode === dernierTrimestre);
+  }
+
   getNoteValue(valeur: string): number {
     return parseFloat(valeur.replace(',', '.'));
   }
+
+
 }
