@@ -32,9 +32,9 @@
           </div>
           <div class="text-right ml-4">
             <div class="text-3xl font-extrabold" 
-                 [class.text-red-600]="getNoteValue(note.valeur) < 10"
-                 [class.text-orange-500]="getNoteValue(note.valeur) >= 10 && getNoteValue(note.valeur) < 12"
-                 [class.text-green-600]="getNoteValue(note.valeur) >= 12">
+                 [class.text-red-600]="getNoteValue(note.valeur) / note.noteSur < 0.5"
+                 [class.text-orange-500]="getNoteValue(note.valeur) / note.noteSur >= 0.5 && getNoteValue(note.valeur) / note.noteSur < 0.6"
+                 [class.text-green-600]="getNoteValue(note.valeur) / note.noteSur >= 0.6">
               {{ note.valeur }}
             </div>
             <div class="text-sm text-gray-500">/ {{ note.noteSur }}</div>
