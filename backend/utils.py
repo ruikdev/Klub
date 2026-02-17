@@ -145,3 +145,55 @@ def get_notes():
         return None, "Impossible de récupérer les notes"
     
     return notes_data, None
+
+
+def get_notes_last_trimester():
+    """Récupérer les notes du dernier trimestre uniquement"""
+    api, error = get_api_instance()
+    if error:
+        return None, error
+    
+    notes_data = api.get_notes()
+    if notes_data is None:
+        return None, "Impossible de récupérer les notes"
+    
+    # Filtrer pour garder uniquement les notes du dernier trimestre
+    if 'notes' not in notes_data or not notes_data['notes']:
+        return notes_data, None
+    
+    # Trouver le dernier code de période (le plus récent)
+    periodes_trouvees = set()
+    for note in notes_data['notes']:
+        if 'codePeriode' in note:
+            periodes_trouvees.add(note['codePeriode'])
+    
+    if not periodes_trouvees:
+        return notes_data, None
+    
+    # Trier les périodes pour trouver la plus récente
+    # Format: A001 (1er trim), A002 (2ème trim), A003 (3ème trim)
+    periodes_valides = sorted([p for p in periodes_trouvees if p.startswith('A0')], reverse=True)
+    
+    if not periodes_valides:
+        return notes_data, None
+    
+    derniere_periode = periodes_valides[0]
+    
+    # Filtrer les notes pour garder uniquement celles du dernier trimestre
+    notes_filtrees = [note for note in notes_data['notes'] if note.get('codePeriode') == derniere_periode]
+    
+    # Créer une copie des données avec les notes filtrées
+    notes_data_filtrees = notes_data.copy()
+    notes_data_filtrees['notes'] = notes_filtrees
+    
+    # Filtrer aussi la section LSUN si elle existe
+    if 'LSUN' in notes_data:
+        lsun_filtree = {}
+        for periode, matieres in notes_data['LSUN'].items():
+            # Vérifier si cette période correspond au dernier trimestre
+            if periode == derniere_periode:
+                lsun_filtree[periode] = matieres
+        if lsun_filtree:
+            notes_data_filtrees['LSUN'] = lsun_filtree
+    
+    return notes_data_filtrees, None
