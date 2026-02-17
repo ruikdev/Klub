@@ -49,6 +49,7 @@ export class NotesComponent implements OnInit {
         console.error('Erreur:', err);
         this.appreciation = 'Impossible de charger l\'appréciation.';
         this.loadingAppreciation = false;
+        // N'afficher qu'une erreur discrète sans bloquer l'affichage des notes
       }
     })
   }
