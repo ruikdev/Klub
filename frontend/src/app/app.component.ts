@@ -17,7 +17,7 @@ export class AppComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  currentPage = 'notes';
+  currentPage = 'devoirs';
 
   togglePage(page: string) {
       this.currentPage = page.toLowerCase();
