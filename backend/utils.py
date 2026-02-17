@@ -133,3 +133,15 @@ def build_devoir_context(id_devoir):
                     contexte_devoir += f"- Contenu du devoir : {contenu_decode}\n"
     
     return contexte_devoir, None
+
+def get_notes():
+    """Récupérer toutes les notes avec leurs détails"""
+    api, error = get_api_instance()
+    if error:
+        return None, error
+    
+    notes_data = api.get_notes()
+    if notes_data is None:
+        return None, "Impossible de récupérer les notes"
+    
+    return notes_data, None
