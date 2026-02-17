@@ -17,7 +17,7 @@ def requests_ia():
     if data is None:
         return jsonify(error="JSON invalide ou vide"), 400
     
-    id_devoir = data.get("id")
+    id_devoir = data.get("id")    
     question = data.get("question", "").strip()
 
     if not question:

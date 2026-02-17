@@ -11,8 +11,16 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getCommentaires(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/notes/commentaire`);
+  }
+
   getDevoirs(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/devoirs`);
+  }
+
+  getNotes(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/notes`);
   }
 
   sendChatMessage(question: string, idDevoir?: number): Observable<any> {

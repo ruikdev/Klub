@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DevoirsComponent } from './devoirs/devoirs.component';
+import { NotesComponent } from './notes/notes.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, DevoirsComponent],
+  imports: [CommonModule, DevoirsComponent, NotesComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -14,5 +15,11 @@ export class AppComponent {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  currentPage = 'notes';
+
+  togglePage(page: string) {
+      this.currentPage = page.toLowerCase();
   }
 }
