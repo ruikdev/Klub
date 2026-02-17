@@ -14,11 +14,15 @@ export class NotesComponent implements OnInit {
   loading = false;
   error: string | null = null;
   matieres: any[] = [];
+  commentaires_brut: any[] = [];
+  appreciation: string = '';
+  loadingAppreciation = false;
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     this.loading = true;
+    this.loadingAppreciation = true;
     this.apiService.getNotes().subscribe({
       next: (data) => {
         console.log('Notes récupérées:', data);
@@ -27,6 +31,7 @@ export class NotesComponent implements OnInit {
         this.notes = this.getLastTrimesterNotes(allNotes);
         this.groupNotesByMatiere();
         this.loading = false;
+
       },
       error: (err) => {
         console.error('Erreur:', err);
@@ -34,6 +39,18 @@ export class NotesComponent implements OnInit {
         this.loading = false;
       }
     });
+    this.apiService.getCommentaires().subscribe({
+      next: (data) => {
+        console.log('Commentaires récupérés:', data);
+        this.appreciation = data.appreciation || 'Aucune appréciation disponible.';
+        this.loadingAppreciation = false;
+      },
+      error: (err) => {
+        console.error('Erreur:', err);
+        this.appreciation = 'Impossible de charger l\'appréciation.';
+        this.loadingAppreciation = false;
+      }
+    })
   }
 
   private groupNotesByMatiere() {
