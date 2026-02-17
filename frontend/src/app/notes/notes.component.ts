@@ -13,6 +13,7 @@ export class NotesComponent implements OnInit {
   notes: any[] = [];
   loading = false;
   error: string | null = null;
+  matieres: any[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -24,6 +25,7 @@ export class NotesComponent implements OnInit {
         // Filtrer pour garder uniquement les notes du dernier trimestre
         const allNotes = data.notes || [];
         this.notes = this.getLastTrimesterNotes(allNotes);
+        this.groupNotesByMatiere();
         this.loading = false;
       },
       error: (err) => {
@@ -34,25 +36,60 @@ export class NotesComponent implements OnInit {
     });
   }
 
+  private groupNotesByMatiere() {
+    const matiereMap = new Map<string, any>();
+
+    this.notes.forEach(note => {
+      const key = note.codeMatiere;
+      if (!matiereMap.has(key)) {
+        matiereMap.set(key, {
+          codeMatiere: note.codeMatiere,
+          libelleMatiere: note.libelleMatiere,
+          notes: [],
+          moyenne: 0,
+          totalPoints: 0,
+          totalCoef: 0
+        });
+      }
+
+      const matiere = matiereMap.get(key);
+      matiere.notes.push(note);
+
+      // Calculer la moyenne pondérée
+      const noteValue = this.getNoteValue(note.valeur);
+      const noteSur = parseFloat(note.noteSur);
+      const coef = parseFloat(note.coef || '1');
+
+      if (!isNaN(noteValue) && !isNaN(noteSur) && noteSur > 0) {
+        const noteNormalisee = (noteValue / noteSur) * 20; // Normaliser sur 20
+        matiere.totalPoints += noteNormalisee * coef;
+        matiere.totalCoef += coef;
+      }
+    });
+
+    // Calculer les moyennes finales
+    matiereMap.forEach(matiere => {
+      if (matiere.totalCoef > 0) {
+        matiere.moyenne = (matiere.totalPoints / matiere.totalCoef).toFixed(2);
+      }
+    });
+
+    this.matieres = Array.from(matiereMap.values());
+  }
+
   private getLastTrimesterNotes(notes: any[]): any[] {
     if (notes.length === 0) return [];
     
-    // Trouver tous les codes de périodes uniques
     const periodes = [...new Set(notes.map(note => note.codePeriode))];
     
-    // Trier les périodes (A001, A002, A003, etc.)
     const periodesTriees = periodes.sort().reverse();
     
-    // Prendre le dernier trimestre (le plus récent)
     const dernierTrimestre = periodesTriees[0];
     
-    // Filtrer les notes du dernier trimestre
     return notes.filter(note => note.codePeriode === dernierTrimestre);
   }
 
   getNoteValue(valeur: string): number {
     return parseFloat(valeur.replace(',', '.'));
   }
-
-
 }
