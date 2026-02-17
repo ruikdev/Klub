@@ -30,7 +30,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div *ngFor="let devoir of dateGroup.devoirs" 
-               class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+               class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
             
             <div class="p-5">
               <div class="flex justify-between items-start mb-3">
@@ -63,7 +63,7 @@
             
             <button (click)="openChat(devoir.idDevoir)" 
                     class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
               <span>Expliquer ce devoir</span>
