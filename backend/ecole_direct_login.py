@@ -1,9 +1,4 @@
-"""
-Api EcoleDirecte - Connexion et récupération de données depuis EcoleDirecte
-- Permet de se connecter à EcoleDirecte en gérant l'authentification
-"""
-
-
+#Api EcoleDirecte - Connexion et récupération de données depuis EcoleDirecte
 
 import requests
 import json
