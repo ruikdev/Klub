@@ -9,7 +9,7 @@ client = Groq(
 
 chat_bp = Blueprint('chat', __name__, url_prefix='/api')
 
-@chat_bp.route('/chat', methods=['POST'])
+@chat_bp.route('/chat_devoirs', methods=['POST'])
 def requests_ia():
     """Route d'aide pédagogique avec IA"""
     data = request.get_json(force=True, silent=True)
