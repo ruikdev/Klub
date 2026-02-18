@@ -30,4 +30,8 @@ export class ApiService {
     };
     return this.http.post(`${this.API_BASE_URL}/chat`, payload);
   }
+
+  getCours(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/cours`);
+  }
 }
