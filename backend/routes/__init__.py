@@ -5,7 +5,9 @@ def register_blueprints(app):
     from routes.devoirs import devoirs_bp
     from routes.chat import chat_bp
     from routes.notes import notes_bp
+    from routes.cours import cours_bp
     
     app.register_blueprint(devoirs_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(notes_bp)
+    app.register_blueprint(cours_bp)
