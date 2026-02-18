@@ -28,6 +28,19 @@ export class ApiService {
       question: question,
       id: idDevoir || null
     };
-    return this.http.post(`${this.API_BASE_URL}/chat`, payload);
+    return this.http.post(`${this.API_BASE_URL}/chat_devoirs`, payload);
+  }
+
+
+  sendChatMessageCours(question: string, cours: string): Observable<any> {
+    const payload = {
+      question: question,
+      cours: cours
+    };
+    return this.http.post(`${this.API_BASE_URL}/cours/chat`, payload);
+  }
+
+  getCours(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/cours`);
   }
 }

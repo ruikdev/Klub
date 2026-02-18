@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { CommonModule } from '@angular/common';
-import { ChatComponent } from '../chat/chat.component';
+import { ChatCoursComponent } from '../chat-cours/chat-cours.component';
 
 @Component({
   selector: 'app-devoirs',
   standalone: true,
-  imports: [CommonModule, ChatComponent],
+  imports: [CommonModule, ChatCoursComponent],
   templateUrl: './devoirs.component.html',
   styleUrl: './devoirs.component.css'
 })
@@ -15,6 +15,9 @@ export class DevoirsComponent implements OnInit {
   devoirsList: Array<{date: string, devoirs: any[], details: any}> = [];
   loading: boolean = true;
   error: string | null = null;
+
+  selectedDevoirId: number | null = null;
+  chatOuvert = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -42,19 +45,13 @@ export class DevoirsComponent implements OnInit {
     }));
   }
 
-  showChat = false;
-  showDevoirs = true;
-  selectedDevoirId: number | null = null;
-
   openChat(idDevoir: number) {
     this.selectedDevoirId = idDevoir;
-    this.showChat = true;
-    this.showDevoirs = false;
+    this.chatOuvert = true;
   }
 
   closeChat() {
-    this.showChat = false;
-    this.showDevoirs = true;
+    this.chatOuvert = false;
     this.selectedDevoirId = null;
   }
 }
