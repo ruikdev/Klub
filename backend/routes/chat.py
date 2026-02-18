@@ -69,7 +69,7 @@ def requests_ia():
 
 
 
-@chat_bp.route('/chat_cours', methods=['POST'])
+@chat_bp.route('/cours/chat', methods=['POST'])
 def requests_ia_cours():
     """Route d'aide pédagogique avec IA"""
     data = request.get_json(force=True, silent=True)
