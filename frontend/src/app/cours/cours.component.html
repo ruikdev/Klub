@@ -35,17 +35,17 @@
         </button>
       </div>
 
-      <!-- Layout 2 colonnes quand chat ouvert -->
-      <div [class]="chatOuvert ? 'flex gap-4' : ''">
+      <!-- Layout responsive quand chat ouvert -->
+      <div [class]="chatOuvert ? 'flex flex-col lg:flex-row gap-4' : ''">
         <!-- Contenu du cours -->
-        <div [class]="chatOuvert ? 'flex-1 min-w-0' : 'w-full'" class="bg-white rounded-xl shadow p-6">
+        <div [class]="chatOuvert ? 'lg:flex-1 min-w-0' : 'w-full'" class="bg-white rounded-xl shadow p-6">
           <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
           <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
           <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
         </div>
 
-        <!-- Chat à droite -->
-        <div *ngIf="chatOuvert" class="w-96 flex-shrink-0 h-[600px]">
+        <!-- Chat en dessous sur mobile, à droite sur desktop -->
+        <div *ngIf="chatOuvert" class="w-full lg:w-96 flex-shrink-0 h-[500px] lg:h-[600px]">
           <app-chat-cours [coursMd]="coursSelectionne.contenu"></app-chat-cours>
         </div>
       </div>
