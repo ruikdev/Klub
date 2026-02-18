@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 import os
 
+# le chat ia pour les cours se trouve dans chat.py
+
 cours_bp = Blueprint('cours', __name__, url_prefix='/api')
 
 @cours_bp.route('/cours', methods=['GET'])
