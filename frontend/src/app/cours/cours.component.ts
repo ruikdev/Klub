@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../api.service';
 import { MarkdownPipe } from '../pipes/markdown.pipe';
+import { ChatCoursComponent } from '../chat-cours/chat-cours.component';
 
 @Component({
   selector: 'app-cours',
   standalone: true,
-  imports: [CommonModule, MarkdownPipe],
+  imports: [CommonModule, MarkdownPipe, ChatCoursComponent],
   templateUrl: './cours.component.html',
   styleUrls: ['./cours.component.css']
 })
@@ -19,6 +20,7 @@ export class CoursComponent implements OnInit {
 
   coursSelectionne: any | null = null;
   matiereSelectionnee: string | null = null;
+  chatOuvert = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -41,10 +43,12 @@ export class CoursComponent implements OnInit {
   ouvrirCours(matiere: string, cours: any) {
     this.matiereSelectionnee = matiere;
     this.coursSelectionne = cours;
+    this.chatOuvert = false;
   }
 
   fermerCours() {
     this.coursSelectionne = null;
     this.matiereSelectionnee = null;
+    this.chatOuvert = false;
   }
 }

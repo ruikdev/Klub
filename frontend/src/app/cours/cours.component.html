@@ -25,14 +25,30 @@
 
     <!-- Vue détail d'un cours -->
     <div *ngIf="coursSelectionne" class="mb-6">
-      <button (click)="fermerCours()" class="mb-4 flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
-        ← Retour aux cours
-      </button>
-      <div class="bg-white rounded-xl shadow p-6">
-        <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
-        <!-- <pre class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed">{{ coursSelectionne.contenu }}</pre> -->
-         <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
+      <div class="flex items-center justify-between mb-4">
+        <button (click)="fermerCours()" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+          ← Retour aux cours
+        </button>
+        <button (click)="chatOuvert = !chatOuvert"
+                class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition">
+          <span>🤖</span>
+          <span>{{ chatOuvert ? 'Fermer Klub AI' : 'Demander à Klub AI' }}</span>
+        </button>
+      </div>
+
+      <!-- Layout 2 colonnes quand chat ouvert -->
+      <div [class]="chatOuvert ? 'flex gap-4' : ''">
+        <!-- Contenu du cours -->
+        <div [class]="chatOuvert ? 'flex-1 min-w-0' : 'w-full'" class="bg-white rounded-xl shadow p-6">
+          <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
+          <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
+        </div>
+
+        <!-- Chat à droite -->
+        <div *ngIf="chatOuvert" class="w-96 flex-shrink-0 h-[600px]">
+          <app-chat-cours [coursMd]="coursSelectionne.contenu"></app-chat-cours>
+        </div>
       </div>
     </div>
 
