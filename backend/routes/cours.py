@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import os
 
 cours_bp = Blueprint('cours', __name__, url_prefix='/api')
@@ -40,3 +40,38 @@ def get_cours():
                 })
 
     return jsonify(cours=result), 200
+
+@cours_bp.route("/cours", methods=["POST"])
+def ajouterCours():
+    """Ajouter un nouveau cours markdown. Body JSON: { matiere, nom, contenu }"""
+    data = request.get_json()
+    if not data:
+        return jsonify(error="Corps JSON manquant"), 400
+
+    matiere = data.get("matiere", "").strip()
+    nom = data.get("nom", "").strip()
+    contenu = data.get("contenu", "").strip()
+
+    if not matiere or not nom:
+        return jsonify(error="Les champs 'matiere' et 'nom' sont obligatoires"), 400
+
+    # Sécuriser les noms pour éviter les path traversal
+    matiere = os.path.basename(matiere)
+    nom = os.path.basename(nom)
+
+    matiere_path = os.path.join("cours", matiere)
+    os.makedirs(matiere_path, exist_ok=True)
+
+    # Ajouter l'extension .md si absente
+    fichier = nom if nom.endswith(".md") else f"{nom}.md"
+    fichier_path = os.path.join(matiere_path, fichier)
+
+    if os.path.exists(fichier_path):
+        return jsonify(error=f"Le cours '{fichier}' existe déjà dans '{matiere}'"), 409
+
+    try:
+        with open(fichier_path, "w", encoding="utf-8") as f:
+            f.write(contenu)
+        return jsonify(message="Cours ajouté avec succès", matiere=matiere, nom=fichier), 201
+    except Exception as e:
+        return jsonify(error=str(e)), 500
