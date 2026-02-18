@@ -17,6 +17,7 @@ export class NotesComponent implements OnInit {
   commentaires_brut: any[] = [];
   appreciation: string = '';
   loadingAppreciation = false;
+  moyenneGenerale: string = '';
 
   constructor(private apiService: ApiService) {}
 
@@ -93,6 +94,7 @@ export class NotesComponent implements OnInit {
     });
 
     this.matieres = Array.from(matiereMap.values());
+    this.calculateMoyenneGenerale();
   }
 
   private getLastTrimesterNotes(notes: any[]): any[] {
@@ -109,5 +111,28 @@ export class NotesComponent implements OnInit {
 
   getNoteValue(valeur: string): number {
     return parseFloat(valeur.replace(',', '.'));
+  }
+
+  private calculateMoyenneGenerale() {
+    if (this.matieres.length === 0) {
+      this.moyenneGenerale = '';
+      return;
+    }
+
+    let totalPoints = 0;
+    let totalCoef = 0;
+
+    this.matieres.forEach(matiere => {
+      const coef = matiere.totalCoef || 0;
+      const points = matiere.totalPoints || 0;
+      totalPoints += points;
+      totalCoef += coef;
+    });
+
+    if (totalCoef > 0) {
+      this.moyenneGenerale = (totalPoints / totalCoef).toFixed(2);
+    } else {
+      this.moyenneGenerale = '';
+    }
   }
 }
