@@ -75,3 +75,21 @@ def ajouterCours():
         return jsonify(message="Cours ajouté avec succès", matiere=matiere, nom=fichier), 201
     except Exception as e:
         return jsonify(error=str(e)), 500
+
+@cours_bp.route('/cours/<matiere>/<nom>', methods=['DELETE'])
+def deleteCours(matiere, nom):
+    """Supprimer un cours markdown. URL: /api/cours/<matiere>/<nom>"""
+    matiere = os.path.basename(matiere)
+    nom = os.path.basename(nom)
+
+    fichier = nom if nom.endswith(".md") else f"{nom}.md"
+    fichier_path = os.path.join("cours", matiere, fichier)
+
+    if not os.path.exists(fichier_path):
+        return jsonify(error=f"Le cours '{fichier}' est introuvable dans '{matiere}'"), 404
+
+    try:
+        os.remove(fichier_path)
+        return jsonify(message=f"Cours '{fichier}' supprimé avec succès"), 200
+    except Exception as e:
+        return jsonify(error=str(e)), 500
