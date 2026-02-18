@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../api.service';
+import { MarkdownPipe } from '../pipes/markdown.pipe';
 
 @Component({
   selector: 'app-cours',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MarkdownPipe],
   templateUrl: './cours.component.html',
   styleUrls: ['./cours.component.css']
 })

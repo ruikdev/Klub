@@ -31,7 +31,8 @@
       <div class="bg-white rounded-xl shadow p-6">
         <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
         <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
-        <pre class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed">{{ coursSelectionne.contenu }}</pre>
+        <!-- <pre class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed">{{ coursSelectionne.contenu }}</pre> -->
+         <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
       </div>
     </div>
 
