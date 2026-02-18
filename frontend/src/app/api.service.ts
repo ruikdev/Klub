@@ -28,7 +28,7 @@ export class ApiService {
       question: question,
       id: idDevoir || null
     };
-    return this.http.post(`${this.API_BASE_URL}/chat`, payload);
+    return this.http.post(`${this.API_BASE_URL}/chat_devoirs`, payload);
   }
 
   getCours(): Observable<any> {
