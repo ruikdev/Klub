@@ -9,13 +9,11 @@
       </span>
     </header>
 
-    <!-- Chargement -->
     <div *ngIf="loading" class="flex flex-col items-center justify-center p-20 space-y-4">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       <p class="text-gray-500 font-medium animate-pulse">Chargement de vos cours...</p>
     </div>
 
-    <!-- Erreur -->
     <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm mb-6">
       <div class="flex items-center">
         <span class="text-red-500 mr-3">⚠️</span>
@@ -23,7 +21,6 @@
       </div>
     </div>
 
-    <!-- Vue détail d'un cours -->
     <div *ngIf="coursSelectionne" class="mb-6">
       <div class="flex items-center justify-between mb-4">
         <button (click)="fermerCours()" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
@@ -34,24 +31,17 @@
           <span>{{ chatOuvert ? 'Fermer Klub AI' : 'Demander à Klub AI' }}</span>
         </button>
       </div>
-
-      <!-- Layout responsive quand chat ouvert -->
       <div [class]="chatOuvert ? 'flex flex-col lg:flex-row gap-4' : ''">
-        <!-- Contenu du cours -->
         <div [class]="chatOuvert ? 'lg:flex-1 min-w-0' : 'w-full'" class="bg-white rounded-xl shadow p-6">
           <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
           <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
           <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
         </div>
-
-        <!-- Chat en dessous sur mobile, à droite sur desktop -->
         <div *ngIf="chatOuvert" class="w-full lg:w-96 flex-shrink-0 h-[500px] lg:h-[600px]">
           <app-chat-cours [coursMd]="coursSelectionne.contenu"></app-chat-cours>
         </div>
       </div>
     </div>
-
-    <!-- Liste des cours par matière -->
     <div *ngIf="!loading && !error && !coursSelectionne" class="space-y-8">
       <div *ngFor="let matiere of matieres">
         <h2 class="text-lg font-bold text-gray-700 uppercase tracking-wide mb-3">{{ matiere }}</h2>

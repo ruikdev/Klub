@@ -26,11 +26,9 @@
       </div>
     </div>
 
-    <!-- Layout responsive : liste + chat côte à côte -->
     <div *ngIf="!loading && !error && devoirsList.length > 0"
          [class]="chatOuvert ? 'flex flex-col lg:flex-row gap-6' : ''">
 
-      <!-- Liste des devoirs -->
       <div [class]="chatOuvert ? 'lg:flex-1 min-w-0' : 'w-full'" class="space-y-12">
         <div *ngFor="let dateGroup of devoirsList" class="relative">
           <h2 class="text-xl font-bold text-indigo-600 mb-6 flex items-center sticky top-0 bg-gray-50 py-2 z-10">
@@ -87,7 +85,6 @@
         </div>
       </div>
 
-      <!-- Chat Klub AI à droite -->
       <div *ngIf="chatOuvert" class="w-full lg:w-96 flex-shrink-0 h-[600px] lg:sticky lg:top-4">
         <app-chat-cours [devoirId]="selectedDevoirId"></app-chat-cours>
       </div>
