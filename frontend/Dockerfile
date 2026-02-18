@@ -24,8 +24,8 @@ COPY --from=build /app/dist/klub /usr/share/nginx/html
 # Copier la configuration nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# # Exposer le port 4200
-# EXPOSE 4200
+# Exposer le port 80 (nginx)
+EXPOSE 80
 
 # Démarrer nginx
 CMD ["nginx", "-g", "daemon off;"]
