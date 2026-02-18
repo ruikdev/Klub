@@ -77,8 +77,8 @@ def requests_ia_cours():
     if data is None:
         return jsonify(error="JSON invalide ou vide"), 400
     
-    cours = data.get("id")
-    question = data.get("question", "").strip()
+    cours = data.get("cours")
+    question = data.get("question")
 
     if not question or not cours:
         return jsonify(error="Question ou cours manquante ou vide"), 400
