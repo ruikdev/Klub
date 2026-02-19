@@ -54,6 +54,13 @@
         </svg>
         Cours
       </a>
+
+      <a (click)="togglePage('ocr')" href="#" [class]="currentPage === 'ocr' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+        </svg>
+        Ajouter un cours
+      </a>
     </nav>
 
     <div class="p-4 border-t border-gray-100 mt-auto">
@@ -86,6 +93,7 @@
       <app-devoirs *ngIf="currentPage === 'devoirs'"></app-devoirs>
       <app-notes *ngIf="currentPage === 'notes'"></app-notes>
       <app-cours *ngIf="currentPage === 'cours'"></app-cours>
+      <app-ocr *ngIf="currentPage === 'ocr'"></app-ocr>
     </div>
   </main>
 </div>

@@ -1,13 +1,35 @@
 import base64
+import io
 import json
 import os
 from flask import Blueprint, jsonify, request
 from groq import Groq
+from PIL import Image
 from routes.cours import save_cours
 
 ocr_bp = Blueprint('ocr', __name__, url_prefix='/api')
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+MAX_SIZE = (1920, 1920)   # résolution max
+MAX_BYTES = 3 * 1024 * 1024  # 3 Mo max par image
+
+def compress_image(image_bytes: bytes, mime_type: str) -> tuple[bytes, str]:
+    """Redimensionne et compresse une image pour respecter la limite Groq."""
+    img = Image.open(io.BytesIO(image_bytes))
+
+    img.thumbnail(MAX_SIZE, Image.LANCZOS)
+
+    quality = 90
+    while True:
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=quality, optimize=True)
+        data = buf.getvalue()
+        if len(data) <= MAX_BYTES or quality <= 30:
+            break
+        quality -= 10
+
+    return data, "image/jpeg"
 
 def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/llama-4-scout-17b-16e-instruct"):
     """
@@ -56,7 +78,7 @@ def ocr():
     if not files:
         return jsonify({"error": "Aucune image fournie (champ 'images' attendu)"}), 400
 
-    images = [(f.read(), f.content_type) for f in files]
+    images = [compress_image(f.read(), f.content_type) for f in files]
 
     try:
         result = ocr_images_from_bytes(images)
