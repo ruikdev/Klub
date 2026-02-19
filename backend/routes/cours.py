@@ -5,17 +5,20 @@ import os
 
 cours_bp = Blueprint('cours', __name__, url_prefix='/api')
 
+# Chemin absolu vers le dossier cours/, relatif à ce fichier
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+COURS_DIR = os.path.join(BASE_DIR, "cours")
+
 @cours_bp.route('/cours', methods=['GET'])
 def get_cours():
     """Récupérer tous les cours markdown organisés par matière"""
-    cours_dir = "cours"
     result = {}
 
-    if not os.path.exists(cours_dir):
+    if not os.path.exists(COURS_DIR):
         return jsonify(error="Dossier cours introuvable"), 404
 
-    for matiere in os.listdir(cours_dir):
-        matiere_path = os.path.join(cours_dir, matiere)
+    for matiere in os.listdir(COURS_DIR):
+        matiere_path = os.path.join(COURS_DIR, matiere)
         if not os.path.isdir(matiere_path):
             continue
 
@@ -51,7 +54,7 @@ def save_cours(matiere: str, nom: str, contenu: str):
     if not matiere or not nom:
         raise ValueError("Les champs 'matiere' et 'nom' sont obligatoires")
 
-    matiere_path = os.path.join("cours", matiere)
+    matiere_path = os.path.join(COURS_DIR, matiere)
     os.makedirs(matiere_path, exist_ok=True)
 
     fichier = nom if nom.endswith(".md") else f"{nom}.md"
@@ -92,7 +95,7 @@ def deleteCours(matiere, nom):
     nom = os.path.basename(nom)
 
     fichier = nom if nom.endswith(".md") else f"{nom}.md"
-    fichier_path = os.path.join("cours", matiere, fichier)
+    fichier_path = os.path.join(COURS_DIR, matiere, fichier)
 
     if not os.path.exists(fichier_path):
         return jsonify(error=f"Le cours '{fichier}' est introuvable dans '{matiere}'"), 404

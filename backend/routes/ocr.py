@@ -2,6 +2,7 @@ import base64
 import io
 import json
 import os
+import time
 from flask import Blueprint, jsonify, request
 from groq import Groq
 from PIL import Image
@@ -71,7 +72,11 @@ def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/lla
         max_tokens=4000
     )
 
-    raw = chat_completion.choices[0].message.content
+    raw = chat_completion.choices[0].message.content.strip()
+    # Supprimer les blocs markdown éventuels (```json ... ```)
+    if raw.startswith("```"):
+        raw = raw.split("\n", 1)[-1]
+        raw = raw.rsplit("```", 1)[0].strip()
     return json.loads(raw)
 
 
@@ -88,15 +93,29 @@ def ocr():
     try:
         result = ocr_images_from_bytes(images)
 
+        matiere = result.get("matiere", "").strip()
+        nom = result.get("nom_cours", "").strip()
+
+        # Fallbacks si l'IA n'a pas détecté les champs
+        MATIERES_VALIDES = {"francais", "mathematique", "histoire", "musique", "physique-chimie", "svt"}
+        if not matiere or matiere not in MATIERES_VALIDES:
+            matiere = "autre"
+        if not nom:
+            nom = f"cours_{int(time.time())}"
+
         saved = save_cours(
-            matiere=result.get("matiere", ""),
-            nom=result.get("nom_cours", ""),
+            matiere=matiere,
+            nom=nom,
             contenu=result.get("texte", "")
         )
+        result["matiere"] = matiere
+        result["nom_cours"] = nom
         result["fichier"] = saved["nom"]
 
         return jsonify(result)
     except json.JSONDecodeError:
         return jsonify({"error": "Réponse IA invalide (JSON malformé)"}), 500
+    except FileExistsError as e:
+        return jsonify({"error": str(e)}), 409
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Erreur inattendue : {str(e)}"}), 500
