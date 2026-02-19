@@ -11,12 +11,11 @@ client = Groq(
 chat_bp = Blueprint('chat', __name__, url_prefix='/api')
 
 
-# ─────────────────────────────────────────────
-# Outils pour le chat global
-# ─────────────────────────────────────────────
 
 def tool_get_cours(matiere: str = None) -> dict:
     """Retourne les cours disponibles, filtrés par matière si précisé."""
+    if not matiere:
+        matiere = None
     cours_dir = "cours"
     result = {}
 
@@ -63,7 +62,6 @@ def tool_get_devoirs() -> dict:
                 "donneLe": devoir.get("donneLe"),
                 "interrogation": devoir.get("interrogation", False),
             }
-            # Chercher le contenu dans les détails
             details = data.get("details")
             if details and "matieres" in details:
                 for mat in details["matieres"]:
@@ -80,7 +78,6 @@ def tool_get_notes() -> dict:
     notes_data, error = get_notes()
     if error:
         return {"error": error}
-    # Simplifier : ne garder que les champs utiles
     notes_list = notes_data.get("notes", [])
     simplified = []
     for note in notes_list:
@@ -153,6 +150,7 @@ GLOBAL_TOOLS_SCHEMA = [
 def execute_global_tool(name: str, arguments: str) -> str:
     try:
         args = json.loads(arguments) if arguments else {}
+        args = {k: v for k, v in args.items() if v is not None}
     except Exception:
         args = {}
 
@@ -181,7 +179,6 @@ def requests_ia():
     if not question:
         return jsonify(error="Question manquante ou vide"), 400
 
-    # Récupérer les informations du devoir si un ID est fourni
     contexte_devoir = ""
     if id_devoir:
         contexte, error = build_devoir_context(id_devoir)
@@ -281,10 +278,6 @@ def requests_ia_cours():
         return jsonify(error="Erreur lors de la génération de la réponse"), 500
 
 
-# ─────────────────────────────────────────────
-# Route Chat Global avec outils (cours, devoirs, notes)
-# ─────────────────────────────────────────────
-
 @chat_bp.route('/chat/global', methods=['POST'])
 def chat_global():
     """Chat IA général avec accès aux cours, devoirs et notes via tool calling."""
@@ -314,22 +307,18 @@ def chat_global():
         "9. Tu peux maintenir une conversation : tiens compte de l'historique des messages précédents."
     )
 
-    # Construire l'historique de messages
     messages = [{"role": "system", "content": system_prompt}]
 
-    # Ajouter l'historique de conversation si fourni
     for msg in messages_input:
         role = msg.get("role")
         content = msg.get("content", "")
         if role in ("user", "assistant") and content:
             messages.append({"role": role, "content": content})
 
-    # Ajouter la question courante si pas déjà dans l'historique
     if question:
         messages.append({"role": "user", "content": question})
 
     try:
-        # Boucle tool calling (même principe que test_chatbot.py)
         max_iterations = 5
         iteration = 0
 
@@ -365,10 +354,8 @@ def chat_global():
                         "tool_call_id": tool_call.id,
                         "content": result
                     })
-                # Reboucler pour que l'IA formule sa réponse finale
 
             else:
-                # Réponse finale de l'IA
                 return jsonify(response=message.content), 200
 
         return jsonify(error="Trop d'itérations de tool calling"), 500
