@@ -4,11 +4,12 @@ import { DevoirsComponent } from './devoirs/devoirs.component';
 import { NotesComponent } from './notes/notes.component';
 import { CoursComponent } from './cours/cours.component';
 import { OcrComponent } from './ocr/ocr.component';
+import { ChatGlobalComponent } from './chat-global/chat-global.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, DevoirsComponent, NotesComponent, CoursComponent, OcrComponent],
+  imports: [CommonModule, DevoirsComponent, NotesComponent, CoursComponent, OcrComponent, ChatGlobalComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
