@@ -9,37 +9,41 @@ ocr_bp = Blueprint('ocr', __name__, url_prefix='/api')
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-def ocr_image_from_bytes(image_bytes, mime_type="image/jpeg", model="meta-llama/llama-4-scout-17b-16e-instruct"):
-    """Effectue l'OCR sur des bytes d'image."""
-    base64_image = base64.b64encode(image_bytes).decode('utf-8')
-    
+def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/llama-4-scout-17b-16e-instruct"):
+    """
+    Effectue l'OCR sur une ou plusieurs pages d'un même cours.
+    images : liste de tuples (image_bytes, mime_type)
+    Retourne un dict { texte, matiere, nom_cours }
+    """
+    # Construire le contenu : une entrée image par page
+    content = []
+    n = len(images)
+    intro = (
+        f"Analyse {'ces ' + str(n) + ' images qui sont les pages d\'un même cours scolaire' if n > 1 else 'cette image de cours scolaire'}."
+        " Réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
+        "- \"texte\" : le texte extrait de toutes les pages, dans l'ordre, au format markdown\n"
+        "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
+        "- \"nom_cours\" : le nom du cours ou du chapitre identifié\n"
+        "Exemple : {\"texte\": \"...\", \"matiere\": \"mathematique\", \"nom_cours\": \"Les vecteurs\"}"
+    )
+    content.append({"type": "text", "text": intro})
+
+    for i, (image_bytes, mime_type) in enumerate(images):
+        b64 = base64.b64encode(image_bytes).decode('utf-8')
+        if n > 1:
+            content.append({"type": "text", "text": f"Page {i + 1} :"})
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:{mime_type};base64,{b64}"}
+        })
+
     chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": (
-                            "Analyse cette image de cours scolaire et réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
-                            "- \"texte\" : le texte extrait de l'image au format markdown\n"
-                            "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
-                            "- \"nom_cours\" : le nom du cours ou du chapitre identifié\n"
-                            "Exemple : {\"texte\": \"...\", \"matiere\": \"mathematique\", \"nom_cours\": \"Les vecteurs\"}"
-                        )
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:{mime_type};base64,{base64_image}"}
-                    }
-                ]
-            }
-        ],
+        messages=[{"role": "user", "content": content}],
         model=model,
         temperature=0.1,
-        max_tokens=2000
+        max_tokens=4000
     )
-    
+
     raw = chat_completion.choices[0].message.content
     return json.loads(raw)
 
@@ -48,15 +52,14 @@ def ocr_image_from_bytes(image_bytes, mime_type="image/jpeg", model="meta-llama/
 
 @ocr_bp.route('/ocr', methods=['POST'])
 def ocr():
-    if "image" not in request.files:
-        return jsonify({"error": "Aucune image fournie"}), 400
-    
-    file = request.files["image"]
-    image_bytes = file.read()
-    mime_type = file.content_type
-    
+    files = request.files.getlist("images")
+    if not files:
+        return jsonify({"error": "Aucune image fournie (champ 'images' attendu)"}), 400
+
+    images = [(f.read(), f.content_type) for f in files]
+
     try:
-        result = ocr_image_from_bytes(image_bytes, mime_type)
+        result = ocr_images_from_bytes(images)
 
         saved = save_cours(
             matiere=result.get("matiere", ""),
