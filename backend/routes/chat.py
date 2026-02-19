@@ -3,10 +3,13 @@ import os
 import json
 from groq import Groq
 from utils import build_devoir_context, get_devoirs_with_details, get_notes, decode_base64_content
+import wikipediaapi
 
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
 )
+
+wiki = wikipediaapi.Wikipedia(user_agent="Klub/1.0", language="fr")
 
 chat_bp = Blueprint('chat', __name__, url_prefix='/api')
 
@@ -92,6 +95,19 @@ def tool_get_notes() -> dict:
         })
     return {"notes": simplified}
 
+def tool_search_wikipedia(query: str) -> dict:
+    """Recherche sur Wikipedia."""
+    page = wiki.page(query)
+    if not page.exists():
+        return {"error": f"Aucune page Wikipedia trouvée pour '{query}'"}
+    return {
+        "titre": page.title,
+        "url": page.fullurl,
+        "resume": page.summary[:1500]
+    }
+
+
+
 
 GLOBAL_TOOLS_SCHEMA = [
     {
@@ -111,6 +127,26 @@ GLOBAL_TOOLS_SCHEMA = [
                     }
                 },
                 "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_wikipedia",
+            "description": (
+                "Recherche une explication ou définition sur Wikipedia. "
+                "Utilise cet outil quand l'élève veut comprendre un concept, une notion, un terme ou un sujet de cours."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Le terme ou concept à rechercher (ex: 'photosynthèse', 'Révolution française')"
+                    }
+                },
+                "required": ["query"]
             }
         }
     },
@@ -160,6 +196,8 @@ def execute_global_tool(name: str, arguments: str) -> str:
         result = tool_get_devoirs()
     elif name == "get_notes":
         result = tool_get_notes()
+    elif name == "search_wikipedia":
+        result = tool_search_wikipedia(**args)
     else:
         result = {"error": f"Outil inconnu : {name}"}
 
