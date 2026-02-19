@@ -1,7 +1,9 @@
 import base64
+import json
 import os
 from flask import Blueprint, jsonify, request
 from groq import Groq
+from routes.cours import save_cours
 
 ocr_bp = Blueprint('ocr', __name__, url_prefix='/api')
 
@@ -18,7 +20,13 @@ def ocr_image_from_bytes(image_bytes, mime_type="image/jpeg", model="meta-llama/
                 "content": [
                     {
                         "type": "text",
-                        "text": "Extrait tout le texte visible de cette image de manière précise et structurée. Fournis seulement le texte extrait au format markdown, sans commentaire supplémentaire."
+                        "text": (
+                            "Analyse cette image de cours scolaire et réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
+                            "- \"texte\" : le texte extrait de l'image au format markdown\n"
+                            "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
+                            "- \"nom_cours\" : le nom du cours ou du chapitre identifié\n"
+                            "Exemple : {\"texte\": \"...\", \"matiere\": \"mathematique\", \"nom_cours\": \"Les vecteurs\"}"
+                        )
                     },
                     {
                         "type": "image_url",
@@ -32,7 +40,8 @@ def ocr_image_from_bytes(image_bytes, mime_type="image/jpeg", model="meta-llama/
         max_tokens=2000
     )
     
-    return chat_completion.choices[0].message.content
+    raw = chat_completion.choices[0].message.content
+    return json.loads(raw)
 
 
 
@@ -47,7 +56,17 @@ def ocr():
     mime_type = file.content_type
     
     try:
-        texte = ocr_image_from_bytes(image_bytes, mime_type)
-        return jsonify({"texte": texte})
+        result = ocr_image_from_bytes(image_bytes, mime_type)
+
+        saved = save_cours(
+            matiere=result.get("matiere", ""),
+            nom=result.get("nom_cours", ""),
+            contenu=result.get("texte", "")
+        )
+        result["fichier"] = saved["nom"]
+
+        return jsonify(result)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Réponse IA invalide (JSON malformé)"}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
