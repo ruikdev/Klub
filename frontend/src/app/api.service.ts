@@ -31,6 +31,13 @@ export class ApiService {
     return this.http.post(`${this.API_BASE_URL}/chat_devoirs`, payload);
   }
 
+  sendOcrImages(images: File | File[]): Observable<any> {
+    const formData = new FormData();
+    const files = Array.isArray(images) ? images : [images];
+    files.forEach(image => formData.append('images', image));
+    return this.http.post(`${this.API_BASE_URL}/ocr`, formData);
+  }
+
 
   sendChatMessageCours(question: string, cours: string): Observable<any> {
     const payload = {
