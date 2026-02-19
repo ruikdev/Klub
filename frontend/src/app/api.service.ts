@@ -50,4 +50,12 @@ export class ApiService {
   getCours(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/cours`);
   }
+
+  sendChatGlobal(question: string, history: { role: string; content: string }[]): Observable<any> {
+    const payload = {
+      question,
+      messages: history
+    };
+    return this.http.post(`${this.API_BASE_URL}/chat/global`, payload);
+  }
 }
