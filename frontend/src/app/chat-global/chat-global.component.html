@@ -1,0 +1,121 @@
+<div class="flex flex-col h-full bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-purple-500 to-indigo-600 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <div class="flex-shrink-0 bg-indigo-100 rounded-full p-2">
+        <svg class="w-6 h-6 text-indigo-600 hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+      </div>
+      <h3 class="text-white font-bold text-sm">Klub AI</h3>
+    </div>
+    @if (messages.length > 0) {
+      <button
+        (click)="clearConversation()"
+        class="text-indigo-200 hover:text-white text-xs underline transition-colors">
+        Effacer
+      </button>
+    }
+  </div>
+
+  <!-- Contenu messages -->
+  <div #messagesContainer class="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+
+    <!-- Message d'accueil -->
+    @if (messages.length === 0) {
+      <div class="text-center mt-8 space-y-3">
+        <svg class="w-6 h-6 text-indigo-600 hover:animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+        <p class="text-gray-600 font-medium text-sm">Bonjour ! Je suis Klub AI.</p>
+        <p class="text-gray-400 text-xs">Je peux t'aider avec tes cours, tes devoirs et tes notes.</p>
+        <div class="flex flex-wrap gap-2 justify-center mt-4">
+          <button (click)="userInput = 'Quels sont mes devoirs ?'; sendMessage()"
+            class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
+            📚 Mes devoirs
+          </button>
+          <button (click)="userInput = 'Quelles sont mes notes ?'; sendMessage()"
+            class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
+            📊 Mes notes
+          </button>
+          <button (click)="userInput = 'Quels cours sont disponibles ?'; sendMessage()"
+            class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
+            📖 Mes cours
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Liste des messages -->
+    @for (msg of messages; track $index) {
+      <div [class]="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+        <div [class]="msg.role === 'user'
+          ? 'max-w-[80%] min-w-0 break-words bg-indigo-600 text-white rounded-2xl rounded-br-sm px-4 py-2.5 text-sm'
+          : 'max-w-[85%] min-w-0 overflow-hidden break-words bg-gray-100 text-gray-800 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm'">
+
+          <!-- Avatar IA -->
+          @if (msg.role === 'assistant' && !msg.loading) {
+            <div class="flex items-start gap-2 min-w-0">
+              <svg class="w-6 h-6 text-indigo-600 hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <div class="overflow-hidden break-words prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:my-1 prose-ul:my-1 prose-li:my-0"
+                [innerHTML]="msg.content | markdown">
+              </div>
+            </div>
+          }
+
+          <!-- Message en cours de chargement -->
+          @if (msg.loading) {
+            <div class="flex items-center gap-2">
+              <svg class="w-6 h-6 text-indigo-600 hover:animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <div class="flex space-x-1">
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+              </div>
+            </div>
+          }
+
+          <!-- Message utilisateur -->
+          @if (msg.role === 'user') {
+            <span>{{ msg.content }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Input -->
+  <div class="border-t border-gray-200 p-4 space-y-3">
+    <textarea
+      [(ngModel)]="userInput"
+      (keydown)="onKeyDown($event)"
+      [disabled]="isLoading"
+      rows="2"
+      class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none disabled:opacity-50 disabled:bg-gray-50"
+      placeholder="Pose ta question sur tes cours, devoirs ou notes...">
+    </textarea>
+    <button
+      (click)="sendMessage()"
+      [disabled]="isLoading || !userInput.trim()"
+      class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+      @if (isLoading) {
+        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        <span>Klub AI réfléchit...</span>
+      } @else {
+        <span>Envoyer</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+      }
+    </button>
+    <p class="text-xs text-gray-400 text-center">Ctrl+Entrée pour envoyer</p>
+    <p class="text-xs text-gray-400 text-center">Klub AI peut faire des erreurs. Pense à vérifier les informations importantes.</p>
+  </div>
+</div>
