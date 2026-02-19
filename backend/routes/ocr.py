@@ -40,8 +40,13 @@ def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/lla
     # Construire le contenu : une entrée image par page
     content = []
     n = len(images)
+    if n > 1:
+        subject = f"ces {n} images qui sont les pages d'un même cours scolaire"
+    else:
+        subject = "cette image de cours scolaire"
+
     intro = (
-        f"Analyse {'ces ' + str(n) + ' images qui sont les pages d\'un même cours scolaire' if n > 1 else 'cette image de cours scolaire'}."
+        f"Analyse {subject}."
         " Réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
         "- \"texte\" : le texte extrait de toutes les pages, dans l'ordre, au format markdown\n"
         "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
