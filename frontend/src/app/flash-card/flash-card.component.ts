@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-flash-card',
@@ -8,5 +9,15 @@ import { Component } from '@angular/core';
   styleUrl: './flash-card.component.css'
 })
 export class FlashCardComponent {
+  flashCards: any[] = [];
 
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.getFlashCards().subscribe(
+      (response) => {
+        this.flashCards = response.flashCards;
+      }
+    )
+  }
 }
