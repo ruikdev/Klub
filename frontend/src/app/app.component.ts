@@ -21,7 +21,7 @@ export class AppComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  currentPage = 'devoirs';
+  currentPage = 'flash-card';
 
   togglePage(page: string) {
       this.currentPage = page.toLowerCase();
