@@ -51,6 +51,10 @@ export class ApiService {
     return this.http.get(`${this.API_BASE_URL}/cours`);
   }
 
+  getFlashCards(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/flash-cards`);
+  }
+
   sendChatGlobal(question: string, history: { role: string; content: string }[]): Observable<any> {
     const payload = {
       question,
