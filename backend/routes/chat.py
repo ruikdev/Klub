@@ -48,47 +48,6 @@ def tool_get_cours(matiere: str = None) -> dict:
 
     return {"cours": result}
 
-#tool flash card
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FLASH_CARDS_DIR = os.path.join(BASE_DIR, "flash-cards")
-
-def tool_get_flash_cards() -> dict:
-    """Récupérer toutes les flash-cards JSON organisées par matière"""
-    
-    
-    result = {}
-
-    if not os.path.exists(FLASH_CARDS_DIR):
-        return {"error": "Dossier flash-cards introuvable"}
-
-    for matiere in os.listdir(FLASH_CARDS_DIR):
-        matiere_path = os.path.join(FLASH_CARDS_DIR, matiere)
-        if not os.path.isdir(matiere_path):
-            continue
-
-        result[matiere] = []
-
-        for fichier in os.listdir(matiere_path):
-            if not fichier.endswith(".json"):
-                continue
-
-            fichier_path = os.path.join(matiere_path, fichier)
-            try:
-                with open(fichier_path, "r", encoding="utf-8") as f:
-                    cartes = json.load(f)
-                result[matiere].append({
-                    "nom": os.path.splitext(fichier)[0],
-                    "fichier": fichier,
-                    "cartes": cartes
-                })
-            except Exception as e:
-                result[matiere].append({
-                    "nom": os.path.splitext(fichier)[0],
-                    "fichier": fichier,
-                    "erreur": str(e)
-                })
-
-    return {"flashCards": result}
 
 def tool_get_devoirs() -> dict:
     """Retourne tous les devoirs à venir."""
@@ -174,26 +133,6 @@ GLOBAL_TOOLS_SCHEMA = [
     {
         "type": "function",
         "function": {
-            "name": "get_flash_cards",
-            "description": (
-                "Retourne le contenu des flash-cards disponibles (fichiers JSON). "
-                "Utilise cet outil quand l'élève pose une question sur un cours, une matière, ou veut réviser un chapitre."
-            ),
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "matiere": {
-                        "type": "string",
-                        "description": "Appel juste la fonction, il ne demande rien, il renvoie toutes les flash-cards disponibles."
-                    }
-                },
-                "required": []
-            }
-        }
-    },
-    {
-        "type": "function",
-        "function": {
             "name": "search_wikipedia",
             "description": (
                 "Recherche une explication ou définition sur Wikipedia. "
@@ -259,8 +198,6 @@ def execute_global_tool(name: str, arguments: str) -> str:
         result = tool_get_notes()
     elif name == "search_wikipedia":
         result = tool_search_wikipedia(**args)
-    elif name == "get_flash_cards":
-        result = tool_get_flash_cards()
     else:
         result = {"error": f"Outil inconnu : {name}"}
 
