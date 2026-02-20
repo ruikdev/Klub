@@ -61,6 +61,7 @@ export class FlashCardComponent {
   }
 
   createFlashCard() {
+    this.selectedMatiere = null;
     this.showAddCard = true;
     this.showCard = false;
     this.successMessage = '';
