@@ -55,6 +55,10 @@ export class ApiService {
     return this.http.get(`${this.API_BASE_URL}/flash-cards`);
   }
 
+  addFlashCard(matiere: string, nom: string, cartes: { question: string; reponse: string }[]): Observable<any> {
+    return this.http.post(`${this.API_BASE_URL}/flash-cards`, { matiere, nom, cartes });
+  }
+
   sendChatGlobal(question: string, history: { role: string; content: string }[]): Observable<any> {
     const payload = {
       question,
