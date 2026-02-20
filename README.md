@@ -4,5 +4,3 @@ Tes cours, tes docs et ton IA au même endroit.
 frontend --> angular
 
 backend --> flask
-
-Je modif juste pour test de push
