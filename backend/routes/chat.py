@@ -17,7 +17,7 @@ chat_bp = Blueprint('chat', __name__, url_prefix='/api')
 
 def tool_get_cours(matiere: str = None) -> dict:
     """Retourne les cours disponibles, filtrés par matière si précisé."""
-    if not matiere:
+    if not matiere or matiere.lower() == "toutes":
         matiere = None
     cours_dir = "cours"
     result = {}
@@ -123,10 +123,10 @@ GLOBAL_TOOLS_SCHEMA = [
                 "properties": {
                     "matiere": {
                         "type": "string",
-                        "description": "Filtre par matière (ex: 'mathematique', 'francais', 'histoire'). Optionnel — si absent, retourne tous les cours."
+                        "description": "Matière à filtrer (ex: 'mathematique', 'francais', 'histoire'). Si l'élève ne précise pas de matière, utilise la valeur \"toutes\"."
                     }
                 },
-                "required": []
+                "required": ["matiere"]
             }
         }
     },
