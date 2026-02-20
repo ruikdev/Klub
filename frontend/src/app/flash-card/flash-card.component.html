@@ -1,8 +1,22 @@
-<div *ngFor="let matiere of matieres">
-  <h2>{{ matiere }}</h2>
+<!-- Sélecteur de matière -->
+<div class="flex flex-wrap gap-2 mb-6">
+  <button
+    *ngFor="let matiere of matieres"
+    (click)="selectMatiere(matiere)"
+    class="px-4 py-2 rounded-full text-sm font-medium capitalize transition-colors"
+    [class.bg-indigo-600]="selectedMatiere === matiere"
+    [class.text-white]="selectedMatiere === matiere"
+    [class.bg-gray-200]="selectedMatiere !== matiere"
+    [class.text-gray-700]="selectedMatiere !== matiere"
+  >
+    {{ matiere }}
+  </button>
+</div>
 
-  <div *ngFor="let deck of flashCards[matiere]">
-    <h3>{{ deck.nom }}</h3>
+<!-- Flash-cards de la matière sélectionnée -->
+<ng-container *ngIf="selectedMatiere; else aucuneSelection">
+  <div *ngFor="let deck of decksActuels" class="mb-8">
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 capitalize">{{ deck.nom }}</h3>
 
     <div class="flex flex-wrap gap-4">
       <div
@@ -11,21 +25,22 @@
         (click)="carte.flipped = !carte.flipped"
       >
         <div
-            class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]"
-            [style.transform]="carte.flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'"
+          class="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]"
+          [style.transform]="carte.flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'"
         >
-          <!-- Face avant : Question -->
-          <div class="absolute inset-0 bg-blue-500 rounded-xl flex items-center justify-center p-4 [backface-visibility:hidden]">
+          <div class="absolute inset-0 bg-indigo-500 rounded-xl flex items-center justify-center p-4 [backface-visibility:hidden]">
             <p class="text-white text-center font-semibold">{{ carte.question }}</p>
           </div>
 
-          <!-- Face arrière : Réponse -->
           <div class="absolute inset-0 bg-green-500 rounded-xl flex items-center justify-center p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <p class="text-white text-center font-semibold">{{ carte.reponse }}</p>
+            <p class="text-white text-center">{{ carte.reponse }}</p>
           </div>
         </div>
       </div>
     </div>
-
   </div>
-</div>
+</ng-container>
+
+<ng-template #aucuneSelection>
+  <p class="text-gray-400 text-center mt-12">Sélectionne une matière pour voir les flash-cards.</p>
+</ng-template>

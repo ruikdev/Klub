@@ -24,6 +24,7 @@ interface Deck {
 export class FlashCardComponent {
   flashCards: { [matiere: string]: Deck[] } = {};
   matieres: string[] = [];
+  selectedMatiere: string | null = null;
 
   constructor(private apiService: ApiService) {}
 
@@ -34,5 +35,14 @@ export class FlashCardComponent {
         this.matieres = Object.keys(response.flashCards);
       }
     );
+  }
+
+  selectMatiere(matiere: string) {
+    this.selectedMatiere = this.selectedMatiere === matiere ? null : matiere;
+  }
+
+  get decksActuels(): Deck[] {
+    if (!this.selectedMatiere) return [];
+    return this.flashCards[this.selectedMatiere] ?? [];
   }
 }
