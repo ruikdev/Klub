@@ -13,3 +13,4 @@ def register_blueprints(app):
     app.register_blueprint(notes_bp)
     app.register_blueprint(cours_bp)
     app.register_blueprint(ocr_bp)
+    app.register_blueprint(flashCard_bp)
