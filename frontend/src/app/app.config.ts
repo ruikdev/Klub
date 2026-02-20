@@ -8,7 +8,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withFetch()),
     provideServiceWorker('ngsw-worker.js', {
-        enabled: !isDevMode(),
+        enabled: true,
         registrationStrategy: 'registerWhenStable:30000'
     })
 ]
