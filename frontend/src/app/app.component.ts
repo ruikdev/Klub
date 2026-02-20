@@ -5,11 +5,12 @@ import { NotesComponent } from './notes/notes.component';
 import { CoursComponent } from './cours/cours.component';
 import { OcrComponent } from './ocr/ocr.component';
 import { ChatGlobalComponent } from './chat-global/chat-global.component';
+import { FlashCardComponent } from './flash-card/flash-card.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, DevoirsComponent, NotesComponent, CoursComponent, OcrComponent, ChatGlobalComponent],
+  imports: [CommonModule, DevoirsComponent, NotesComponent, CoursComponent, OcrComponent, ChatGlobalComponent, FlashCardComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
