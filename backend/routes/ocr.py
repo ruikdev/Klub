@@ -96,8 +96,7 @@ def ocr():
         matiere = result.get("matiere", "").strip()
         nom = result.get("nom_cours", "").strip()
 
-        # Fallbacks si l'IA n'a pas détecté les champs
-        MATIERES_VALIDES = {"francais", "mathematique", "histoire", "musique", "physique-chimie", "svt"}
+        MATIERES_VALIDES = {"francais", "mathematique", "histoire", "musique", "physique-chimie", "svt", "espagnol"}
         if not matiere or matiere not in MATIERES_VALIDES:
             matiere = "autre"
         if not nom:
