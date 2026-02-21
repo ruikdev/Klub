@@ -50,7 +50,7 @@ def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/lla
         f"Analyse {subject}."
         " Réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
         "- \"texte\" : le texte extrait de toutes les pages, dans l'ordre, au format markdown\n"
-        "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
+        "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt, espagnol\n"
         "- \"nom_cours\" : le nom du cours ou du chapitre identifié\n"
         "Exemple : {\"texte\": \"...\", \"matiere\": \"mathematique\", \"nom_cours\": \"Les vecteurs\"}"
     )
