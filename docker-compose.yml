@@ -7,19 +7,17 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: klub-backend
-    env_file:
-      - ./backend/.env
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
     volumes:
-      - ./backend/cours:/app/cours
-      - ./backend/flash-cards:/app/flash-cards
-      - ./backend/ecole_direct_config.json:/app/ecole_direct_config.json
-    expose:
-      - "5000"          # Interne uniquement, pas exposé sur le VPS
+      - ./backend:/app
     restart: unless-stopped
     networks:
       - klub-network
 
-  # Service Frontend (Angular + Nginx)
+  # Service Frontend (Angular)
   frontend:
     build:
       context: ./frontend
@@ -27,6 +25,8 @@ services:
     container_name: klub-frontend
     ports:
       - "4200:80"
+    environment:
+      - NODE_ENV=production
     depends_on:
       - backend
     restart: unless-stopped
