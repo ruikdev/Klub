@@ -48,12 +48,9 @@ def ocr_images_from_bytes(images: list[tuple[bytes, str]], model="meta-llama/lla
 
     intro = (
         f"Analyse {subject}."
-        " Réponds UNIQUEMENT avec un objet JSON brut (sans bloc ```json, sans explication), avec exactement ces 3 champs :\n"
-        "- \"texte\" : le texte extrait de toutes les pages dans l'ordre, mis en forme en markdown."
-        " Utilise # pour les titres de chapitres, ## pour les parties, ### pour les sous-parties,"
-        " **gras** pour les mots importants, des listes à puces pour les énumérations."
-        " Les retours à la ligne doivent être représentés par \\n dans la chaîne JSON.\n"
-        "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt, espagnol\n"
+        " Réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, avec exactement ces 3 champs :\n"
+        "- \"texte\" : le texte extrait de toutes les pages, dans l'ordre, au format markdown\n"
+        "- \"matiere\" : la matière parmi ces valeurs exactes uniquement : francais, mathematique, histoire, musique, physique-chimie, svt\n"
         "- \"nom_cours\" : le nom du cours ou du chapitre identifié\n"
         "Exemple : {\"texte\": \"# Chapitre 1\\n\\n## I. Le théorème de Thalès\\n\\nSoit **ABC** un triangle.\\n\\n- AM/AB = AN/AC\", \"matiere\": \"mathematique\", \"nom_cours\": \"Le théorème de Thalès\"}"
     )
