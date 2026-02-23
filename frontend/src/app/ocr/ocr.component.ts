@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../api.service';
+import { MarkdownPipe } from '../pipes/markdown.pipe';
 
 @Component({
   selector: 'app-ocr',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MarkdownPipe],
   templateUrl: './ocr.component.html',
   styleUrl: './ocr.component.css'
 })

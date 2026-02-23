@@ -79,7 +79,7 @@
         <span class="text-4xl">✅</span>
       </div>
       <hr class="border-gray-100" />
-      <div class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto">{{ result.texte }}</div>
+      <div class="text-sm text-gray-700 leading-relaxed max-h-80 overflow-y-auto" [innerHTML]="result.texte | markdown"></div>
       <button (click)="reset()" class="mt-2 w-full py-2 border border-indigo-300 text-indigo-600 font-medium rounded-xl hover:bg-indigo-50 transition">
         Ajouter un autre cours
       </button>
