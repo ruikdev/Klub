@@ -18,11 +18,13 @@ RUN npm run build
 # Stage 2: Image de production avec nginx
 FROM nginx:alpine
 
+ARG NGINX_CONFIG=nginx.conf
+
 # Copier les fichiers buildés vers nginx
 COPY --from=build /app/dist/klub /usr/share/nginx/html
 
 # Copier la configuration nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ${NGINX_CONFIG} /etc/nginx/conf.d/default.conf
 
 # Exposer le port 80 (nginx)
 EXPOSE 80

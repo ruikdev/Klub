@@ -20,6 +20,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NGINX_CONFIG: nginx.prod.conf
     container_name: klub-frontend
     ports:
       - "127.0.0.1:4200:80"
