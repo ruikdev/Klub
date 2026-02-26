@@ -8,8 +8,10 @@ services:
     container_name: klub-backend
     environment:
       - FLASK_ENV=production
+    env_file:
+      - ./backend/.env
     expose:
-      - "5000"          # plus exposé publiquement, Nginx fait le relais
+      - "5000"
     restart: unless-stopped
     networks:
       - klub-network
@@ -20,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: klub-frontend
     ports:
-      - "127.0.0.1:4200:80"   # uniquement accessible en local par Nginx
+      - "127.0.0.1:4200:80"
     depends_on:
       - backend
     restart: unless-stopped
