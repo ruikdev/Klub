@@ -4,3 +4,4 @@ requests
 groq
 Pillow
 wikipedia-api
+gunicorn
