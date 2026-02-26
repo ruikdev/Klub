@@ -1,36 +1,32 @@
 version: '3.8'
+
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: klub-backend
-    env_file:
-      - ./backend/.env
-    volumes:
-      - ./backend/cours:/app/cours
-      - ./backend/flash-cards:/app/flash-cards
-      - ./backend/ecole_direct_config.json:/app/ecole_direct_config.json
+    environment:
+      - FLASK_ENV=production
     expose:
-      - "5000"
+      - "5000"          # plus exposé publiquement, Nginx fait le relais
     restart: unless-stopped
     networks:
       - klub-network
+
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: klub-frontend
     ports:
-      - "4200:80"
-    volumes:
-      - ./frontend/nginx.prod.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend/.htpasswd:/etc/nginx/.htpasswd
+      - "127.0.0.1:4200:80"   # uniquement accessible en local par Nginx
     depends_on:
       - backend
     restart: unless-stopped
     networks:
       - klub-network
+
 networks:
   klub-network:
     driver: bridge

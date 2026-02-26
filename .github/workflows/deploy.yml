@@ -18,4 +18,9 @@ jobs:
           script: |
             cd ~/klub
             git pull origin main
+
+            if [ ! -f /etc/nginx/.htpasswd ]; then
+              echo "${{ secrets.BASIC_AUTH_PASS }}" | htpasswd -ci /etc/nginx/.htpasswd ${{ secrets.BASIC_AUTH_USER }}
+            fi
+
             docker compose -f docker-compose.prod.yml up -d --build
