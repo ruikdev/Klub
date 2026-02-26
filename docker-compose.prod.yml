@@ -10,8 +10,8 @@ services:
       - FLASK_ENV=production
     env_file:
       - ./backend/.env
-    expose:
-      - "5000"
+    ports:
+      - "127.0.0.1:5000:5000"
     restart: unless-stopped
     networks:
       - klub-network
