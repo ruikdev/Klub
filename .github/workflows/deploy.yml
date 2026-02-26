@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/klub
+            cd ~/Klub
             git pull origin main
 
             if [ ! -f /etc/nginx/.htpasswd ]; then
