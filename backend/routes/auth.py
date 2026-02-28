@@ -4,7 +4,7 @@ import os
 authentification_bp = Blueprint('authentification', __name__, url_prefix='/api')
 
 
-@authentification_bp.route('/login', methods=['POST'])
+@authentification_bp.route('/auth/login', methods=['POST'])
 def login():
     """Authentification avec le code d'accès"""
     data = request.get_json()
@@ -18,7 +18,7 @@ def login():
     return jsonify(error="Code incorrect"), 401
 
 
-@authentification_bp.route('/logout', methods=['POST'])
+@authentification_bp.route('/auth/logout', methods=['POST'])
 def logout():
     """Déconnexion"""
     session.clear()
