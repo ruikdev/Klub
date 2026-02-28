@@ -2,6 +2,7 @@ from flask import Flask, jsonify, session, request
 from dotenv import load_dotenv
 from routes import register_blueprints
 import os
+from routes.auth import limiter
 
 load_dotenv()
 
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+limiter.init_app(app)
 
 PUBLIC_ROUTES = {'/api/auth/login', '/api/health'}
 

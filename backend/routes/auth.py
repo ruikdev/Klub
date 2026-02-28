@@ -1,10 +1,14 @@
 from flask import Blueprint, jsonify, request, session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 
 authentification_bp = Blueprint('authentification', __name__, url_prefix='/api')
 
+limiter = Limiter(get_remote_address)
 
 @authentification_bp.route('/auth/login', methods=['POST'])
+@limiter.limit("5 per minute")
 def login():
     """Authentification avec le code d'accès"""
     data = request.get_json()
