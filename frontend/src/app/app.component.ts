@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { DevoirsComponent } from './devoirs/devoirs.component';
 import { NotesComponent } from './notes/notes.component';
 import { CoursComponent } from './cours/cours.component';
@@ -21,9 +21,14 @@ export class AppComponent implements OnInit {
   isAuthenticated = false;
   currentPage = 'devoirs';
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.apiService.checkSession().subscribe({
       next: () => this.isAuthenticated = true,
       error: () => this.isAuthenticated = false

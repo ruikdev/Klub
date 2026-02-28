@@ -10,7 +10,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-PUBLIC_ROUTES = {'/api/login', '/api/health'}
+PUBLIC_ROUTES = {'/api/auth/login', '/api/health'}
 
 @app.before_request
 def check_auth():
