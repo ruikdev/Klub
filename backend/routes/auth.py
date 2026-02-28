@@ -18,7 +18,7 @@ def login():
     return jsonify(error="Code incorrect"), 401
 
 
-@authentification_bp.route('/auth/logout', methods=['POST'])
+@authentification_bp.route('/auth/logout', methods=['POST']) #oui, la fonction n'est pas utiliée pour l'instant, mais elle pourrait être utile à l'avenir (absolument pas mdr, j'ai la flemme + pas utile)
 def logout():
     """Déconnexion"""
     session.clear()
