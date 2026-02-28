@@ -5,3 +5,4 @@ groq
 Pillow
 wikipedia-api
 gunicorn
+bcrypt

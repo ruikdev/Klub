@@ -1,4 +1,6 @@
-
+@if (!isAuthenticated) {
+  <app-auth (loginSuccess)="onLoginSuccess()"></app-auth>
+} @else {
 <div class="flex h-screen bg-gray-50 font-sans">
   
   <!-- Sidebar (Desktop: Fixed / Mobile: Hidden) -->
@@ -114,3 +116,4 @@
     </div>
   </main>
 </div>
+}
