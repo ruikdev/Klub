@@ -66,4 +66,8 @@ export class ApiService {
     };
     return this.http.post(`${this.API_BASE_URL}/chat/global`, payload);
   }
+
+  checkSession(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/auth/check`);
+  }
 }
