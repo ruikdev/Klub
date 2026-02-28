@@ -67,6 +67,10 @@ export class ApiService {
     return this.http.post(`${this.API_BASE_URL}/chat/global`, payload);
   }
 
+  login(password: string): Observable<any> {
+    return this.http.post(`${this.API_BASE_URL}/auth/login`, { code: password });
+  }
+
   logout(): Observable<any> {
     return this.http.post(`${this.API_BASE_URL}/auth/logout`, {});
   }
