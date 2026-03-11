@@ -19,6 +19,8 @@ def check_auth():
     """Vérifie l'authentification avant chaque requête protégée"""
     if request.method == 'OPTIONS':
         return None
+    if not request.path.startswith('/api/'):
+        return None
     if request.path in PUBLIC_ROUTES:
         return None
     if not session.get('authenticated'):
