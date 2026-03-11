@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, session, request
+from flask import Flask, jsonify, session, request, send_from_directory
 from dotenv import load_dotenv
 from routes import register_blueprints
 import os
 from routes.auth import limiter
+
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist', 'klub')
 
 load_dotenv()
 
@@ -31,6 +33,14 @@ def health():
     return jsonify(status="ok"), 200
 
 register_blueprints(app)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_frontend(path):
+    file_path = os.path.join(FRONTEND_DIR, path)
+    if path and os.path.isfile(file_path):
+        return send_from_directory(FRONTEND_DIR, path)
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
