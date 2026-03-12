@@ -290,6 +290,7 @@ def requests_ia_cours():
         "8. Ta réponse doit être adaptée au niveau d'un élève de collège ou lycée, en fonction du contexte fourni. "
         "9. IMPORTANT : Ta réponse doit clore la conversation. Ne pose JAMAIS de question à l'élève car il ne pourra pas te répondre directement. Fournis toujours une réponse complète et autonome."
         "10. CRITIQUE : Réponds UNIQUEMENT en utilisant les informations du cours fourni. "
+        "11 ultra important: quand tu réponds, tu dois TOUJOURS siter ta source, c'est à dire le cours, en précisant la matière, le nom du fichier et la section (si possible) d'où tu tires l'information. Par exemple : 'D'après le cours de mathématiques, fichier 'fonctions.md', section 'croissance et décroissance'...'. "
         "Si l'information n'est PAS dans le cours, réponds EXACTEMENT : "
         "'⚠️ Cette information ne figure pas dans le cours fourni. Je ne peux pas répondre sans risque d'erreur.' "
         "Ne fais JAMAIS d'hypothèses ou d'explications générales si elles ne sont pas dans le cours."
