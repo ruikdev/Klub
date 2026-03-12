@@ -3,7 +3,7 @@ import os
 import base64
 from ecole_direct_login import EcoleDirecteAPI
 
-CONFIG_FILE = "ecole_direct_config.json"
+CONFIG_FILE = "backend/ecole_direct_config.json"
 
 def load_config():
     """Charger la configuration sauvegardée"""
