@@ -46,4 +46,11 @@ export class AppComponent implements OnInit {
   togglePage(page: string) {
     this.currentPage = page.toLowerCase();
   }
+
+  logout() {
+    this.apiService.logout().subscribe({
+      next: () => this.isAuthenticated = false,
+      error: () => this.isAuthenticated = false
+    });
+  }
 }
