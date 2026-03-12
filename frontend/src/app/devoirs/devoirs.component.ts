@@ -19,6 +19,19 @@ export class DevoirsComponent implements OnInit {
   selectedDevoirId: number | null = null;
   chatOuvert = false;
 
+  get totalDevoirs(): number {
+    return this.devoirsList.reduce((total: number, group: { date: string; devoirs: any[]; details: any }) => {
+      return total + (group.devoirs?.length || 0);
+    }, 0);
+  }
+
+  get totalInterrogations(): number {
+    return this.devoirsList.reduce((total: number, group: { date: string; devoirs: any[]; details: any }) => {
+      const interrogations = (group.devoirs || []).filter((devoir: any) => devoir.interrogation).length;
+      return total + interrogations;
+    }, 0);
+  }
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
