@@ -1,0 +1,142 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <header class="flex flex-col gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">🎒 Agenda des Devoirs</h1>
+        <p class="mt-1 text-sm text-gray-500">Retrouve tes devoirs par date et ouvre Klub AI en un clic.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span *ngIf="!loading && !error" class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
+          {{ devoirsList.length }} Jour{{ devoirsList.length > 1 ? 's' : '' }}
+        </span>
+        <button
+          *ngIf="chatOuvert"
+          (click)="closeChat()"
+          class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+        >
+          <span>Fermer AI</span>
+        </button>
+      </div>
+    </header>
+
+    <div *ngIf="!loading && !error" class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Jours planifiés</p>
+        <p class="mt-2 text-2xl font-extrabold text-gray-900">{{ devoirsList.length }}</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Devoirs totaux</p>
+        <p class="mt-2 text-2xl font-extrabold text-gray-900">{{ totalDevoirs }}</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Interrogations</p>
+        <p class="mt-2 text-2xl font-extrabold text-red-600">{{ totalInterrogations }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="rounded-2xl border border-gray-200 bg-white p-14 shadow-sm">
+      <div class="flex flex-col items-center justify-center space-y-4">
+        <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-600"></div>
+        <p class="animate-pulse font-medium text-gray-500">Chargement de vos devoirs...</p>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="rounded-xl border-l-4 border-red-500 bg-red-50 p-4 shadow-sm">
+      <div class="flex items-center">
+        <span class="mr-3 text-red-500">⚠️</span>
+        <p class="font-medium text-red-700">{{ error }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && !error && devoirsList.length > 0" [class]="chatOuvert ? 'flex flex-col gap-6 xl:flex-row' : ''">
+      <div [class]="chatOuvert ? 'xl:min-w-0 xl:flex-1' : 'w-full'" class="space-y-8">
+        <section *ngFor="let dateGroup of devoirsList" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
+            <h2 class="flex items-center text-lg font-bold text-indigo-700 sm:text-xl">
+              <span class="mr-3 h-8 w-2 rounded-full bg-indigo-600"></span>
+              {{ dateGroup.date | titlecase }}
+            </h2>
+            <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
+              {{ dateGroup.devoirs.length }} devoir{{ dateGroup.devoirs.length > 1 ? 's' : '' }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <article
+              *ngFor="let devoir of dateGroup.devoirs"
+              [class.ring-2]="selectedDevoirId === devoir.idDevoir"
+              [class.ring-indigo-400]="selectedDevoirId === devoir.idDevoir"
+              class="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md"
+            >
+              <div class="p-5">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Matière</p>
+                    <h3 class="truncate text-lg font-bold text-gray-900">{{ devoir.matiere }}</h3>
+                  </div>
+                  <span
+                    *ngIf="devoir.interrogation"
+                    class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-red-600"
+                  >
+                    Interro
+                  </span>
+                </div>
+
+                <div class="mb-4 inline-flex items-center rounded-lg bg-gray-50 px-2.5 py-1.5 text-xs text-gray-500">
+                  <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Donné le {{ devoir.donneLe }}
+                </div>
+
+                <div class="space-y-2">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Travail à faire</p>
+
+                  <div *ngIf="dateGroup.details && dateGroup.details.matieres" class="space-y-2">
+                    <ng-container *ngFor="let matiere of dateGroup.details.matieres">
+                      <div
+                        *ngIf="matiere.id === devoir.idDevoir && matiere.aFaire?.contenu_decode"
+                        class="rounded-lg border border-gray-100 bg-gray-50 p-3"
+                      >
+                        <div class="prose prose-sm max-w-none text-gray-700" [innerHTML]="matiere.aFaire.contenu_decode"></div>
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <div *ngIf="!dateGroup.details || !dateGroup.details.matieres" class="rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3 text-sm text-gray-500">
+                    Aucun détail supplémentaire disponible pour ce devoir.
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-100 bg-gray-50 p-3">
+                <button
+                  (click)="openChat(devoir.idDevoir)"
+                  class="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                  </svg>
+                  <span>{{ selectedDevoirId === devoir.idDevoir && chatOuvert ? 'Klub AI ouvert' : 'Expliquer ce devoir' }}</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside *ngIf="chatOuvert" class="h-[600px] w-full shrink-0 xl:sticky xl:top-4 xl:w-[24rem]">
+        <app-chat-cours [devoirId]="selectedDevoirId"></app-chat-cours>
+      </aside>
+    </div>
+
+    <div
+      *ngIf="!loading && !error && devoirsList.length === 0"
+      class="mt-6 rounded-2xl border-2 border-dashed border-gray-200 bg-white py-20 text-center shadow-inner"
+    >
+      <span class="mb-4 block text-5xl text-gray-300">🎉</span>
+      <h3 class="text-lg font-semibold text-gray-900">Aucun devoir à l'horizon !</h3>
+      <p class="mt-1 text-sm text-gray-500">Profite de ton temps libre ou prends de l'avance sur les révisions.</p>
+    </div>
+  </div>
+</div>
