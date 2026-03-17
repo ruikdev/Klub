@@ -60,7 +60,7 @@ export class OcrComponent {
         this.selectedFiles = [];
       },
       error: (err) => {
-        this.error = err?.error?.error ?? 'Une erreur est survenue.';
+        this.error = err?.error?.error ?? 'An error occurred.';
         this.loading = false;
       }
     });

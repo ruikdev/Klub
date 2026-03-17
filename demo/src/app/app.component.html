@@ -17,7 +17,7 @@
     <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
       <div class="absolute top-0 right-0 -mr-12 pt-2">
         <button (click)="toggleMenu()" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-          <span class="sr-only">Fermer menu</span>
+          <span class="sr-only">Close menu</span>
           <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -34,12 +34,16 @@
       <h1 class="text-2xl font-extrabold text-indigo-600 tracking-tighter">Klub</h1>
     </div>
 
+    <div class="mx-4 mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+      DEMO MODE · Sample data only
+    </div>
+
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
       <a (click)="togglePage('devoirs')" href="#" [class]="currentPage === 'devoirs' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
         <svg [class]="currentPage === 'devoirs' ? 'animate-bounce w-5 h-5 mr-3' : 'w-5 h-5 mr-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        Devoirs
+        Homework
       </a>
 
 
@@ -47,14 +51,14 @@
         <svg [class]="currentPage === 'notes' ? 'animate-bounce w-5 h-5 mr-3' : 'w-5 h-5 mr-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
-        Notes
+        Grades
       </a>
 
       <a (click)="togglePage('cours')" href="#" [class]="currentPage === 'cours' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
         <svg [class]="currentPage === 'cours' ? 'animate-bounce w-5 h-5 mr-3' : 'w-5 h-5 mr-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
         </svg>
-        Cours
+        Courses
       </a>
 
       <a (click)="togglePage('ocr')" href="#" [class]="currentPage === 'ocr' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
@@ -62,14 +66,14 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
         </svg>
-        Ajouter un cours
+        Import Course
       </a>
 
       <a (click)="togglePage('flash-card')" href="#" [class]="currentPage === 'flash-card' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
         <svg [class]="currentPage === 'flash-card' ? 'animate-bounce w-5 h-5 mr-3' : 'w-5 h-5 mr-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
         </svg>
-        Flash Card
+        Flash Cards
       </a>
 
       <a (click)="togglePage('chat-global')" href="#" [class]="currentPage === 'chat-global' ? 'flex items-center px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-medium transition-colors' : 'flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition-colors'">
@@ -86,8 +90,8 @@
           E
         </div>
         <div>
-          <p class="text-sm font-semibold text-gray-900">Élève</p>
-          <p class="text-xs text-gray-500">Connecté</p>
+          <p class="text-sm font-semibold text-gray-900">Student</p>
+          <p class="text-xs text-gray-500">Signed in</p>
         </div>
         <div>
           <button (click)="logout()" class="ml-auto p-2 text-gray-500 hover:bg-gray-100 rounded-md  transition transform hover:text-red-500">
@@ -104,7 +108,10 @@
   <main class="flex-1 flex flex-col overflow-hidden relative z-0">
     <!-- Header Mobile -->
     <header class="md:hidden bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 sticky top-0 z-10">
-      <h1 class="text-xl font-bold text-indigo-600">Klub.</h1>
+      <div class="flex items-center gap-2">
+        <h1 class="text-xl font-bold text-indigo-600">Klub.</h1>
+        <span class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">Demo</span>
+      </div>
       <button (click)="toggleMenu()" class="p-2 text-gray-500 hover:bg-gray-100 rounded-md">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -114,6 +121,9 @@
 
     <!-- Content Scrollable -->
     <div class="flex-1 overflow-auto p-4 md:p-8 scroll-smooth">
+      <div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-800">
+        Demo mode is enabled. This app uses sample data and no external API calls.
+      </div>
       <app-devoirs *ngIf="currentPage === 'devoirs'"></app-devoirs>
       <app-notes *ngIf="currentPage === 'notes'"></app-notes>
       <app-cours *ngIf="currentPage === 'cours'"></app-cours>

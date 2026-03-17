@@ -42,7 +42,7 @@ export class DevoirsComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Erreur lors du chargement des devoirs';
+        this.error = 'Error while loading homework';
         this.loading = false;
         console.error(err);
       }

@@ -29,7 +29,7 @@ export class FlashCardComponent {
   showCard = true;
   showAddCard = false;
 
-  // Formulaire ajout
+  // Add form
   newMatiere = '';
   newNom = '';
   newCartes: { question: string; reponse: string }[] = [{ question: '', reponse: '' }];
@@ -81,12 +81,12 @@ export class FlashCardComponent {
   submitFlashCard() {
     const cartesValides = this.newCartes.filter(c => c.question.trim() && c.reponse.trim());
     if (!this.newMatiere.trim() || !this.newNom.trim() || cartesValides.length === 0) {
-      this.errorMessage = 'Matière, nom et au moins une carte sont requis.';
+      this.errorMessage = 'Subject, deck name and at least one card are required.';
       return;
     }
     this.apiService.addFlashCard(this.newMatiere.trim(), this.newNom.trim(), cartesValides).subscribe({
       next: () => {
-        this.successMessage = 'Flash-card ajoutée avec succès !';
+        this.successMessage = 'Flash card set added successfully!';
         this.errorMessage = '';
         this.newMatiere = '';
         this.newNom = '';
@@ -94,7 +94,7 @@ export class FlashCardComponent {
         this.loadFlashCards();
       },
       error: (err) => {
-        this.errorMessage = err.error?.error ?? "Erreur lors de l'ajout.";
+        this.errorMessage = err.error?.error ?? 'Error while saving.';
       }
     });
   }

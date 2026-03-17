@@ -26,8 +26,8 @@ export class NotesComponent implements OnInit {
     this.loadingAppreciation = true;
     this.apiService.getNotes().subscribe({
       next: (data) => {
-        console.log('Notes récupérées:', data);
-        // Filtrer pour garder uniquement les notes du dernier trimestre
+        console.log('Grades loaded:', data);
+        // Keep only grades from the latest term
         const allNotes = data.notes || [];
         this.notes = this.getLastTrimesterNotes(allNotes);
         this.groupNotesByMatiere();
@@ -35,22 +35,22 @@ export class NotesComponent implements OnInit {
 
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.error = 'Impossible de charger les notes';
+        console.error('Error:', err);
+        this.error = 'Unable to load grades';
         this.loading = false;
       }
     });
     this.apiService.getCommentaires().subscribe({
       next: (data) => {
-        console.log('Commentaires récupérés:', data);
-        this.appreciation = data.appreciation || 'Aucune appréciation disponible.';
+        console.log('Comments loaded:', data);
+        this.appreciation = data.appreciation || 'No summary available.';
         this.loadingAppreciation = false;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.appreciation = 'Impossible de charger l\'appréciation.';
+        console.error('Error:', err);
+        this.appreciation = 'Unable to load summary.';
         this.loadingAppreciation = false;
-        // N'afficher qu'une erreur discrète sans bloquer l'affichage des notes
+        // Keep grades visible even if summary fails
       }
     })
   }
@@ -74,19 +74,19 @@ export class NotesComponent implements OnInit {
       const matiere = matiereMap.get(key);
       matiere.notes.push(note);
 
-      // Calculer la moyenne pondérée
+      // Calculate weighted average
       const noteValue = this.getNoteValue(note.valeur);
       const noteSur = parseFloat(note.noteSur);
       const coef = parseFloat(note.coef || '1');
 
       if (!isNaN(noteValue) && !isNaN(noteSur) && noteSur > 0) {
-        const noteNormalisee = (noteValue / noteSur) * 20; // Normaliser sur 20
+        const noteNormalisee = (noteValue / noteSur) * 20; // Normalize to 20-point scale
         matiere.totalPoints += noteNormalisee * coef;
         matiere.totalCoef += coef;
       }
     });
 
-    // Calculer les moyennes finales
+    // Calculate final averages
     matiereMap.forEach(matiere => {
       if (matiere.totalCoef > 0) {
         matiere.moyenne = (matiere.totalPoints / matiere.totalCoef).toFixed(2);

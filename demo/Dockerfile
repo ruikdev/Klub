@@ -15,19 +15,19 @@ COPY . .
 # Build de l'application Angular en mode production
 RUN npm run build
 
-# Stage 2: Image de production avec nginx
-FROM nginx:alpine
+# Stage 2: Runtime Node sans nginx
+FROM node:20-alpine AS runtime
 
-ARG NGINX_CONFIG=nginx.conf
+WORKDIR /app
 
-# Copier les fichiers buildés vers nginx
-COPY --from=build /app/dist/klub /usr/share/nginx/html
+# Serveur statique léger pour exposer la build
+RUN npm install -g serve
 
-# Copier la configuration nginx
-COPY ${NGINX_CONFIG} /etc/nginx/conf.d/default.conf
+# Copier la build Angular
+COPY --from=build /app/dist/klub ./dist/klub
 
-# Exposer le port 80 (nginx)
+# Exposer le port HTTP
 EXPOSE 80
 
-# Démarrer nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Démarrer le serveur statique
+CMD ["serve", "-s", "dist/klub", "-l", "80"]

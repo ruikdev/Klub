@@ -46,21 +46,21 @@ export class ChatGlobalComponent implements AfterViewChecked {
     const question = this.userInput.trim();
     if (!question || this.isLoading) return;
 
-    // Ajouter le message utilisateur
+    // Add user message
     this.messages.push({ role: 'user', content: question });
     this.userInput = '';
     this.isLoading = true;
     this.shouldScrollToBottom = true;
 
-    // Ajouter un message de chargement
+    // Add loading message
     const loadingMsg: ChatMessage = { role: 'assistant', content: '', loading: true };
     this.messages.push(loadingMsg);
     this.shouldScrollToBottom = true;
 
-    // Construire l'historique (user + assistant uniquement, sans le loading courant)
+    // Build history (user + assistant only, without current loading item)
     const history = this.messages
       .filter(m => !m.loading && m.content)
-      .slice(0, -1) // exclure la question courante
+      .slice(0, -1) // exclude current question
       .map(m => ({ role: m.role, content: m.content }));
 
     this.api.sendChatGlobal(question, history).subscribe({
@@ -78,7 +78,7 @@ export class ChatGlobalComponent implements AfterViewChecked {
       },
       error: (err: any) => {
         const idx = this.messages.indexOf(loadingMsg);
-        const errorMsg = err?.error?.error || 'Une erreur est survenue. Réessaie.';
+        const errorMsg = err?.error?.error || 'An error occurred. Please try again.';
         if (idx !== -1) {
           this.messages[idx] = {
             role: 'assistant',

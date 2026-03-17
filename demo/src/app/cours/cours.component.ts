@@ -33,8 +33,8 @@ export class CoursComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.error = 'Impossible de charger les cours';
+        console.error('Error:', err);
+        this.error = 'Unable to load courses';
         this.loading = false;
       }
     });

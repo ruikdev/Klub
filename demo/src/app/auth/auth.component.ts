@@ -21,7 +21,7 @@ export class AuthComponent {
     this.errorMessage = '';
     this.apiService.login(password).subscribe({
       next: () => this.loginSuccess.emit(),
-      error: () => this.errorMessage = 'Code incorrect'
+      error: () => this.errorMessage = 'Invalid code'
     });
   }
 }

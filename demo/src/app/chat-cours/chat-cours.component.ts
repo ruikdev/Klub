@@ -12,9 +12,9 @@ import { MarkdownPipe } from '../pipes/markdown.pipe';
   styleUrl: './chat-cours.component.css'
 })
 export class ChatCoursComponent implements OnChanges {
-  // Mode "cours" : fournir le contenu markdown du cours
+  // "Course" mode: provide markdown course content
   @Input() coursMd: string = '';
-  // Mode "devoir" : fournir l'id du devoir
+  // "Homework" mode: provide homework id
   @Input() devoirId: number | null = null;
 
   question: string = '';
@@ -25,14 +25,14 @@ export class ChatCoursComponent implements OnChanges {
   constructor(private apiService: ApiService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    // Réinitialiser à chaque changement de devoir/cours
+    // Reset on each homework/course change
     this.question = '';
     this.response = '';
     this.error = null;
 
-    // Si mode devoir, envoyer la question d'explication automatiquement
+    // If homework mode, automatically ask for an explanation
     if (this.devoirId) {
-      this.question = "Peux-tu m'expliquer ce devoir ?";
+      this.question = "Can you explain this homework?";
       this.sendMessage();
     }
   }
@@ -55,7 +55,7 @@ export class ChatCoursComponent implements OnChanges {
         this.loading = false;
       },
       error: (err) => {
-        this.error = err.error?.error || "Erreur lors de la communication avec l'IA";
+        this.error = err.error?.error || "Error while talking to AI";
         this.loading = false;
       }
     });

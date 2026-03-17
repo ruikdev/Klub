@@ -7,53 +7,53 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
       </div>
-      <h3 class="text-white font-bold text-sm">Klub AI</h3>
+      <h3 class="text-white font-bold text-sm">Klub AI · Demo</h3>
     </div>
     @if (messages.length > 0) {
       <button
         (click)="clearConversation()"
         class="text-indigo-200 hover:text-white text-xs underline transition-colors">
-        Effacer
+        Clear
       </button>
     }
   </div>
 
-  <!-- Contenu messages -->
+  <!-- Messages -->
   <div #messagesContainer class="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
 
-    <!-- Message d'accueil -->
+    <!-- Welcome message -->
     @if (messages.length === 0) {
       <div class="text-center mt-8 space-y-3">
         <svg class="w-6 h-6 text-indigo-600 hover:animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
-        <p class="text-gray-600 font-medium text-sm">Bonjour ! Je suis Klub AI.</p>
-        <p class="text-gray-400 text-xs">Je peux t'aider avec tes cours, tes devoirs et tes notes.</p>
+        <p class="text-gray-600 font-medium text-sm">Hi! I’m Klub AI.</p>
+        <p class="text-gray-400 text-xs">Demo mode: I can help with courses, homework and grades.</p>
         <div class="flex flex-wrap gap-2 justify-center mt-4">
-          <button (click)="userInput = 'Quels sont mes devoirs ?'; sendMessage()"
+          <button (click)="userInput = 'What homework do I have?'; sendMessage()"
             class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
-            📚 Mes devoirs
+            📚 My homework
           </button>
-          <button (click)="userInput = 'Quelles sont mes notes ?'; sendMessage()"
+          <button (click)="userInput = 'What are my grades?'; sendMessage()"
             class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
-            📊 Mes notes
+            📊 My grades
           </button>
-          <button (click)="userInput = 'Quels cours sont disponibles ?'; sendMessage()"
+          <button (click)="userInput = 'Which courses are available?'; sendMessage()"
             class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors">
-            📖 Mes cours
+            📖 My courses
           </button>
         </div>
       </div>
     }
 
-    <!-- Liste des messages -->
+    <!-- Messages list -->
     @for (msg of messages; track $index) {
       <div [class]="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
         <div [class]="msg.role === 'user'
           ? 'max-w-[80%] min-w-0 break-words bg-indigo-600 text-white rounded-2xl rounded-br-sm px-4 py-2.5 text-sm'
           : 'max-w-[85%] min-w-0 overflow-hidden break-words bg-gray-100 text-gray-800 rounded-2xl rounded-bl-sm px-4 py-2.5 text-sm'">
 
-          <!-- Avatar IA -->
+          <!-- AI avatar -->
           @if (msg.role === 'assistant' && !msg.loading) {
             <div class="flex items-start gap-2 min-w-0">
               <svg class="w-6 h-6 text-indigo-600 hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@
             </div>
           }
 
-          <!-- Message en cours de chargement -->
+          <!-- Loading message -->
           @if (msg.loading) {
             <div class="flex items-center gap-2">
               <svg class="w-6 h-6 text-indigo-600 hover:animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@
             </div>
           }
 
-          <!-- Message utilisateur -->
+          <!-- User message -->
           @if (msg.role === 'user') {
             <span>{{ msg.content }}</span>
           }
@@ -96,7 +96,7 @@
       [disabled]="isLoading"
       rows="2"
       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none disabled:opacity-50 disabled:bg-gray-50"
-      placeholder="Pose ta question sur tes cours, devoirs ou notes...">
+      placeholder="Ask about your courses, homework or grades...">
     </textarea>
     <button
       (click)="sendMessage()"
@@ -107,15 +107,15 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        <span>Klub AI réfléchit...</span>
+        <span>Klub AI is thinking...</span>
       } @else {
-        <span>Envoyer</span>
+        <span>Send</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
       }
     </button>
-    <p class="text-xs text-gray-400 text-center">Ctrl+Entrée pour envoyer</p>
-    <p class="text-xs text-gray-400 text-center">Klub AI peut faire des erreurs. Pense à vérifier les informations importantes.</p>
+    <p class="text-xs text-gray-400 text-center">Ctrl+Enter to send</p>
+    <p class="text-xs text-gray-400 text-center">Demo assistant response: verify important information.</p>
   </div>
 </div>

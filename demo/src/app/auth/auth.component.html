@@ -1,9 +1,14 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-50">
   <div class="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
 
+    <div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-center text-xs font-medium text-amber-800">
+      DEMO MODE · Sample data only
+    </div>
+
     <div class="mb-8 text-center">
       <h1 class="text-3xl font-bold text-gray-800">Klub</h1>
-      <p class="text-sm text-gray-400 mt-1">Entrez votre code d'accès</p>
+      <p class="text-sm text-gray-400 mt-1">Enter your access code</p>
+      <p class="text-xs text-gray-400 mt-2">Any non-empty code works in demo mode.</p>
     </div>
 
     <form (ngSubmit)="postLogin(code)" class="space-y-4">
@@ -11,7 +16,7 @@
         type="password"
         [(ngModel)]="code"
         name="code"
-        placeholder="Code d'accès"
+        placeholder="Access code"
         autocomplete="current-password"
         class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
       />
@@ -24,7 +29,7 @@
         type="submit"
         class="w-full py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold transition"
       >
-        Se connecter
+        Sign in
       </button>
     </form>
 
