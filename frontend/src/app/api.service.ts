@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -49,6 +49,14 @@ export class ApiService {
 
   getCours(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/cours`);
+  }
+
+  upsertCours(matiere: string, nom: string, contenu: string): Observable<HttpResponse<any>> {
+    return this.http.post<any>(
+      `${this.API_BASE_URL}/cours`,
+      { matiere, nom, contenu },
+      { observe: 'response' }
+    );
   }
 
   getFlashCards(): Observable<any> {

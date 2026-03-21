@@ -26,16 +26,46 @@
         <button (click)="fermerCours()" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
           ← Retour aux cours
         </button>
-        <button (click)="chatOuvert = !chatOuvert"
-                class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition">
-          <span>{{ chatOuvert ? 'Fermer Klub AI' : 'Ouvrir Klub AI' }}</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button (click)="toggleEdition()"
+                  class="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition">
+            <span>{{ modeEdition ? 'Preview' : 'Édition' }}</span>
+          </button>
+          <button (click)="chatOuvert = !chatOuvert"
+                  class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition">
+            <span>{{ chatOuvert ? 'Fermer Klub AI' : 'Ouvrir Klub AI' }}</span>
+          </button>
+        </div>
       </div>
+
+      <div *ngIf="saveMessage" class="bg-green-50 border-l-4 border-green-500 p-3 rounded shadow-sm mb-4 text-green-700 text-sm font-medium">
+        {{ saveMessage }}
+      </div>
+      <div *ngIf="saveError" class="bg-red-50 border-l-4 border-red-500 p-3 rounded shadow-sm mb-4 text-red-700 text-sm font-medium">
+        {{ saveError }}
+      </div>
+
       <div [class]="chatOuvert ? 'flex flex-col lg:flex-row gap-4' : ''">
         <div [class]="chatOuvert ? 'lg:flex-1 min-w-0' : 'w-full'" class="bg-white rounded-xl shadow p-6">
           <p class="text-xs text-gray-400 uppercase mb-1">{{ matiereSelectionnee }}</p>
           <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ coursSelectionne.nom }}</h2>
-          <div class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
+
+          <div *ngIf="!modeEdition" class="whitespace-pre-wrap text-gray-700 text-sm leading-relaxed" [innerHTML]="coursSelectionne.contenu | markdown"></div>
+
+          <div *ngIf="modeEdition" class="space-y-3">
+            <textarea
+              [(ngModel)]="contenuEdition"
+              class="w-full h-80 p-3 border border-gray-300 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Modifie ton cours ici..."></textarea>
+            <div class="flex justify-end">
+              <button
+                (click)="mettreAJourCours()"
+                [disabled]="saving"
+                class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed">
+                {{ saving ? 'Mise à jour...' : 'Mettre à jour' }}
+              </button>
+            </div>
+          </div>
         </div>
         <div *ngIf="chatOuvert" class="w-full lg:w-96 flex-shrink-0 h-[500px] lg:h-[600px]">
           <app-chat-cours [coursMd]="coursSelectionne.contenu"></app-chat-cours>
