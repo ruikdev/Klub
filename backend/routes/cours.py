@@ -60,13 +60,12 @@ def save_cours(matiere: str, nom: str, contenu: str):
     fichier = nom if nom.endswith(".md") else f"{nom}.md"
     fichier_path = os.path.join(matiere_path, fichier)
 
-    if os.path.exists(fichier_path):
-        raise FileExistsError(f"Le cours '{fichier}' existe déjà dans '{matiere}'")
+    existed = os.path.exists(fichier_path)
 
     with open(fichier_path, "w", encoding="utf-8") as f:
         f.write(contenu)
 
-    return {"matiere": matiere, "nom": fichier}
+    return {"matiere": matiere, "nom": fichier, "updated": existed}
 
 
 @cours_bp.route("/cours", methods=["POST"])
@@ -82,8 +81,10 @@ def ajouterCours():
             nom=data.get("nom", ""),
             contenu=data.get("contenu", "").strip()
         )
+        if saved.get("updated"):
+            return jsonify(message="Cours remplacé avec succès", **saved), 200
         return jsonify(message="Cours ajouté avec succès", **saved), 201
-    except (ValueError, FileExistsError) as e:
+    except ValueError as e:
         return jsonify(error=str(e)), 409
     except Exception as e:
         return jsonify(error=str(e)), 500
