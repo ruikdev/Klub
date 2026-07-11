@@ -2,6 +2,7 @@
 
 Klub is a school assistance app that puts courses, documents, and AI help in one place.
 It uses the Ecole Directe (Mon ENT) ecosystem to retrieve student data (homework and grades), then adds AI tools to help with study and revision.
+The project will soon be modified to use the Pronote API instead of Direct School.
 
 ## Tech Stack
 
